@@ -7,6 +7,11 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 // import Allocate from './Components/Allocate-class';
 import Navbar from './Components/Navbar'
+import Login from './Components/Login';
+import AdminRegister from './Components/AdminRegister';
+import StudentRegister from './Components/StudentRegister';
+import TeacherRegister from './Components/TeacherRegister';
+import Home from './Components/Home';
 
 
 // <Route exact path='/' element={<Home />} />
@@ -33,7 +38,12 @@ function App() {
   return (
     <>
       <Routes>
-      <Route exact path='/' element={<Navbar />} />
+        <Route exact path='/navbar' element={<Navbar />} />
+        <Route exact path='/' element={<Home />} />
+        <Route exact path='/login' element={<Login />} />
+        <Route exact path='/adminregister' element={<AdminRegister />} />
+        <Route exact path='/studentregister' element={<StudentRegister />} />
+        <Route exact path='/teacherregister' element={<TeacherRegister />} />
       </Routes>
       <ToastContainer/>
     </>
