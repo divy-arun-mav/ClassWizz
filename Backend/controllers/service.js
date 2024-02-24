@@ -4,6 +4,7 @@ const Student = require('../models/Student');
 const Admin = require('../models/Admin');
 const Teacher = require('../models/Teacher');
 const bcrypt = require('bcrypt')
+const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken')
 
 exports.signin = async (req, res) => {
@@ -93,10 +94,58 @@ exports.signin = async (req, res) => {
   }
 };
 
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  port: 465,
+  secureConnection: false,
+  auth: {
+    user: "am7620613@gmail.com",
+    pass: "yjiqasnwcujeqyds",
+  }
+});
+
+exports.sendMsg = async (req, res) => {
+  // const { branch, msg, mail } = req.body;
+  const { branch, msg} = req.body;
+
+  if (!branch || !msg) {
+    return res.status(422).json({ error: 'All Fields Are Required!' });
+  }
+  try {
+    const mailid = await Student.find({branch:branch}, 'mail'); 
+    const emailAddresses = mailid.map(student => student.mail);
+
+    const info = await transporter.sendMail({
+      // from: mail,
+      from: "am7620613@gmail.com",
+      to: emailAddresses.join(','),
+      subject: "From DJSCE",
+      text: "Hello world?",
+      html: `<b>${msg}</b>`,
+    });
+
+    return res.status(200).json({ message: 'Message sent successfully!' });
+
+  } catch (err) {
+    console.error(`Error sending message: ${err}`);
+    return res.status(500).json({ error: `Internal Server Error -> ${err}` });
+  }
+};
+
+
 exports.user = async (req, res) => {
   try {
     const userData = req.user;
     res.status(200).json({ msg: userData })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.students = async (req, res) => {
+  try {
+    const data = await Student.find({}); 
+    res.status(200).json({ msg: data })
   } catch (error) {
     console.log(error)
   }
@@ -162,7 +211,6 @@ exports.signup = async (req, res) => {
 exports.getclass = async (req, res) => {
   try {
     const {strength} = req.query;
-    // console.log("STRENGTH:",strength);
 
     if (isNaN(strength)) {
       return res.status(400).json({ error: "Strength parameter must be a valid number" });
@@ -171,7 +219,8 @@ exports.getclass = async (req, res) => {
     const classrooms = await Classroom.find({
       isReserved: false,
       strength: { $gte: strength }
-    });
+  }).select('classroom_no strength facility isReserved');
+  
 
     if (classrooms.length === 0) {
       console.log("No classes found with isReserved set to false");
@@ -188,18 +237,18 @@ exports.getclass = async (req, res) => {
 
 
 exports.updateclass = async (req, res) => {
-  const { id } = "65d9bc4bad644bba959fac50";
+  const { id } = req.query;
 
-  if (!req.Teacher || !req.Teacher.username) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+  // if (!req.Teacher || !req.Teacher.username) {
+  //   return res.status(401).json({ message: 'Unauthorized' });
+  // }
 
-  const { username: faculty_name } = req.Teacher;
-
+  // const { username: faculty_name } = req.Teacher;
   try {
     const classroom = await Classroom.findOneAndUpdate(
-      { _id: "65d9bc4bad644bba959fac50" },
-      { $set: { isReserved: true, faculty_name } },
+      { _id: id },
+      // { $set: { isReserved: true, faculty_name } },
+      { $set: { isReserved: true, faculty_name:"Ashish Sabka Baap" } },
       { useFindAndModify: false, new: true }
     );
 
@@ -214,4 +263,3 @@ exports.updateclass = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-

@@ -1,23 +1,79 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 
 export default function ClassRoom() {
+    const [data, setData] = useState('');
+    const [strength, setStrength] = useState('');
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
+
+    const handleSubmit = async () => {
+        const ans = await fetch(`http://localhost:8000/getclassroom/?strength=${strength}`, {
+            method: "GET",
+            // headers: {
+            //     "Content-Type": "application/json",
+            //     'Authorization': `Bearer ${token}`,
+            //   }
+        });
+        if (ans.ok) {
+            const dataa = await ans.json();
+            console.log("Response:", dataa);
+            setData(dataa.classrooms);
+        } else {
+            console.error('Error:', ans.statusText);
+        }
+    }
+
+    const allocate = async (id) => {
+        const ans = await fetch(`http://localhost:8000/updateclass/?id=${id}`, {
+            method: "PUT",
+        });
+        if (ans.ok) {
+            const updatedData = data.filter((ele) => ele._id !== id);
+            setData(updatedData);
+            // notifyB("Class Allocated Successfully");
+            alert("Class Allocated Successfully");
+            setStrength("");
+        } else {
+            console.error('Error:', ans.statusText);
+        }
+    }
+
+
     return (
         <div className="container mt-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Class Strength" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                <button class="btn btn-success" type="button" id="button-addon2">Button</button>
+                <input type="text" class="form-control" placeholder="Class Strength" aria-label="Recipient's username" aria-describedby="button-addon2" value={strength} onChange={(e) => { setStrength(e.target.value) }} />
+                <button class="btn btn-success" type="button" id="button-addon2" onClick={handleSubmit}>Button</button>
             </div>
-            <ul class="list-group mt-5">
-                <li class="list-group-item">An item
-                <span className='ms-auto'>
-                <button class="btn btn-success">Allocate</button>
-                </span>
-                </li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li>
-            </ul>
+
+            <div className="table-responsive mt-5">
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" className="text-center">Strength</th>
+                            <th scope="col" className="text-center">Facility</th>
+                            <th scope="col" className="text-center">CR No.</th>
+                            <th scope="col" className="text-center">Buttons</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Array.isArray(data) && data.map((ele) => (
+                            <tr key={ele._id}>
+                                <td className="text-center">{ele.strength}</td>
+                                <td className="text-center">{ele.facility}</td>
+                                <td className="text-center">{ele.classroom_no}</td>
+                                <td className="text-center">
+                                    <button class="btn btn-primary" type="button" id="button-addon2" onClick={() => allocate(ele._id)}>Allocate</button>
+                                </td>
+                            </tr>
+                        ))}
+
+                    </tbody>
+
+
+                </table>
+            </div>
             <style>{`
             .input-group input{
                 border:2px solid black;
