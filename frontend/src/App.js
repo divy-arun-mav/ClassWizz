@@ -13,16 +13,18 @@ import Home from './Components/Home';
 import ClassRoom from './Components/ClassRoom';
 import { useState, useEffect } from 'react';
 import Attendance from './Components/Attendance';
+import { useAuth } from './Components/store/auth';
 
 function App() {
-  const [user, setUser] = useState(null); // Initialize with null
+  const { person } = useAuth();
+  const [user, setUser] = useState('');
 
   let ans;
-
   useEffect(() => {
     ans = localStorage.getItem('USER');
     setUser(ans ? JSON.parse(ans) : null);
   }, []);
+  console.log("FROM APP.JS: ",person);
 
   return (
     <>
@@ -31,15 +33,17 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/attendance' element={<Attendance />} />
+
         <Route exact path='/classroom' element={<ClassRoom />} />
+        <Route exact path='/studentregister' element={<StudentRegister />} />
+        <Route exact path='/teacherregister' element={<TeacherRegister />} />
+        <Route exact path='/adminregister' element={<AdminRegister />} />
         
-        {ans && (
-          <>
-            {user && user.isStudent && <Route exact path='/studentregister' element={<StudentRegister />} />}
-            {user && user.isTeacher && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
-            {user && user.isAdmin && <Route exact path='/adminregister' element={<AdminRegister />} />}
-          </>
-        )}
+        { person==="Student" && <Route exact path='/studentregister' element={<StudentRegister />} />}
+        { person==="Teacher" && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
+        { person==="Admin" && <Route exact path='/adminregister' element={<AdminRegister />} />}
+
+
       </Routes>
       <ToastContainer />
     </>
