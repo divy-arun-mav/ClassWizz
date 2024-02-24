@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './store/auth';
 export default function Navbar() {
-    // const {} = useAuth();
+    const {isLoggedIn,LogoutUser, token,setPerson, person} = useAuth();
     const [user,setUser] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
         const ans = localStorage.getItem("USER");
         setUser(ans ? JSON.parse(ans) : null);
     }, []);
+
+    console.log(person)
 
     return (
         <>
@@ -45,7 +47,7 @@ export default function Navbar() {
                                 <Link className="nav-link active" aria-current="page" to='/private/payment'>Attendance</Link>
                             </li>
                             <li className="nav-item">
-                                <select name="" id="">
+                                <select value={person} onChange={(e) => { setPerson(e.target.value) }}>
                                     <option value="Teacher">Teacher</option>
                                     <option value="Student">Student</option>
                                     <option value="Admin">Admin</option>

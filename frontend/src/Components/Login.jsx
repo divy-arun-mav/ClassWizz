@@ -4,6 +4,7 @@ import { useAuth } from './store/auth'
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Login() {
+    const {person} = useAuth();
     const navigate = useNavigate();
 
     // username, password, type
