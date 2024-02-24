@@ -1,4 +1,5 @@
 require('dotenv').config()
+const Classroom = require("../models/Classroom")
 const Student = require('../models/Student');
 const Admin = require('../models/Admin');
 const Teacher = require('../models/Teacher');
@@ -148,3 +149,21 @@ exports.signin = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+exports.setclass = async (req, res) => {
+  const { classroom_no ,faculty_name, subject, strength, location, facility } = req.body;
+
+  if (!classroom_no || !faculty_name || !subject || !strength || !location || !facility) {
+    res.status(422).json({ error: "Please enter all the fields" });
+  }
+  try {
+    const classroom = await Classroom.findOne({ classroom_no });
+    if (!classroom) { 
+      res.status(500).json("Internal Server Error")
+    }
+    res.status(200).json({ classroom });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

@@ -22,6 +22,10 @@ const teacherSchema = new Schema({
     subject:{
         type: String,
         required: true,
+    },
+    classroom: {
+        type: String,
+        required: true,
     }
 });
 
