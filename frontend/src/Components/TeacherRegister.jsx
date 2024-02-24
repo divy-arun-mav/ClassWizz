@@ -1,27 +1,62 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
 import { useAuth } from './store/auth'
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Navbar from './Navbar';
 
 export default function TeacherRegister() {
     const navigate = useNavigate();
+    const {person,storeTokenInLS} = useAuth();
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [mail, setMail] = useState('');
+    const [teacher_id, setTeacherId] = useState('');
+    const [subject, setSubject] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
+        if (!username || !password || !mail) {
+            return notifyA("All Fields Are Required!!!");
+        }
 
-        } catch (error) {
-            console.error("Error during login:", error);
-            alert("An error occurred during login. Please try again.");
+        try {
+            const response = await fetch("http://localhost:8000/signup", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    mail,
+                    subject,
+                    teacher_id,
+                    person
+                }),
+            });
+
+            if (response.status === 200) {
+                const res_data = await response.json();
+                console.log("response from server ", res_data);
+                storeTokenInLS(res_data.token);
+                notifyB("Registration Successfull !!!");
+                navigate("/login");
+            } else {
+                return notifyA("Username Already Exist!!!");
+            }
+        }
+        catch (error) {
+            notifyA(error);
         }
     };
 
 
-    const [pass, setPass] = useState('');
     return (
         <>
-            <Navbar />
+            <Navbar/>
             <div className="container ">
 
                 <div className="form-body">
@@ -32,15 +67,27 @@ export default function TeacherRegister() {
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
-                        </div>
-                        <div className="checkbox-area">
-                            <label htmlFor="admin-check">register as teacher</label>
-                            <input type="checkbox" name="register as admin" id="admin-check" />
+                            <input type="password" id="password" name="password" value={password}
+                                onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="form-group">
-                            <button type="submit">Login</button>
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value={mail}
+                                onChange={(e) => setMail(e.target.value)} required />
+                        </div>
+                        <div className="form-group">
+                            <label for="student-id">Teacher ID:</label>
+                            <input type="student-id" id="student-id" name="student-id" value={teacher_id}
+                                onChange={(e) => setTeacherId(e.target.value)} required />
+                        </div>
+                        
+                        <div className="form-group">
+                            <label for="yos">Subject:</label>
+                            <input type="yos" id="yos" name="yos" value={subject}
+                                onChange={(e) => setSubject(e.target.value)} required />
+                        </div>
+                        <div className="form-group">
+                            <button type="submit">SignUp</button>
                         </div>
                     </form>
                 </div>

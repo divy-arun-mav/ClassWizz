@@ -2,23 +2,54 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useAuth } from './store/auth'
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function StudentRegister() {
+    const {person,storeTokenInLS} = useAuth();
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [studentId, setStudentId] = useState('');
+    const [mail, setMail] = useState('');
+    const [student_id, setStudentId] = useState('');
     const [branch, setBranch] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(username,password,mail);
+        if (!username || !password || !mail) {
+            return notifyA("All Fields Are Required!!!");
+        }
 
         try {
+            const response = await fetch("http://localhost:8000/signup", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                        username,
+                        password,
+                        mail,
+                        student_id,
+                        branch,
+                        type:person
+                    }),
+            });
 
-        } catch (error) {
-            console.error("Error during login:", error);
-            alert("An error occurred during login. Please try again.");
+            if (response.status === 200) {
+                const res_data = await response.json();
+                console.log("response from server ", res_data);
+                storeTokenInLS(res_data.token);
+                notifyB("Registration Successfull !!!");
+                navigate("/login");
+            } else {
+                return notifyA("Username Already Exist!!!");
+            }
+        }
+        catch (error) {
+            notifyA(error);
         }
     };
 
@@ -33,7 +64,7 @@ export default function StudentRegister() {
                     <form id="registerForm" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required />
+                            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
@@ -42,12 +73,12 @@ export default function StudentRegister() {
                         </div>
                         <div className="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value={email}
-                                onChange={(e) => setEmail(e.target.value)} required />
+                            <input type="email" id="email" name="email" value={mail}
+                                onChange={(e) => setMail(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="student-id">Student ID:</label>
-                            <input type="student-id" id="student-id" name="student-id" value={studentId}
+                            <input type="student-id" id="student-id" name="student-id" value={student_id}
                                 onChange={(e) => setStudentId(e.target.value)} required />
                         </div>
                         <div className="form-group">
@@ -61,7 +92,7 @@ export default function StudentRegister() {
                                 onChange={(e) => setPass(e.target.value)} required />
                         </div>
                         <div className="form-group">
-                            <button type="submit">Login</button>
+                            <button type="submit">SignUp</button>
                         </div>
                     </form>
                 </div>
