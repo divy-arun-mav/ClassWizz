@@ -13,7 +13,7 @@ exports.signin = async (req, res) => {
       return res.status(422).json({ error: "Please provide a valid username and password" });
     }
   
-    if(type=="admin"){
+    if(type=="Admin"){
         try {
             const user = await Admin.findOne({ mail });
         
@@ -39,7 +39,7 @@ exports.signin = async (req, res) => {
             return res.status(500).json({ error: "Internal server error" });
           }
     }
-    else if(type=="teacher"){
+    else if(type=="Teacher"){
         try {
             const user = await Teacher.findOne({ mail });
         
@@ -113,12 +113,12 @@ exports.signin = async (req, res) => {
     try {
         let userType;
 
-        if (type === 'student') {
-            userType = 'student';
-        } else if (type === 'admin') {
-            userType = 'admin';
-        } else if (type === 'teacher') {
-            userType = 'teacher';
+        if (type === 'Student') {
+            userType = 'Student';
+        } else if (type === 'Admin') {
+            userType = 'Admin';
+        } else if (type === 'Teacher') {
+            userType = 'Teacher';
         } else {
             console.log('Invalid user type');
             return res.status(422).json({ error: 'Invalid user type' });

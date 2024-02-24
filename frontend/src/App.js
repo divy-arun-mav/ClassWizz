@@ -1,11 +1,10 @@
 import './App.css';
 import { toast } from 'react-toastify';
-// import { useAuth } from "./store/auth";
 // import PrivateRoute from "./user-routes/PrivateRoute";
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
-// import Allocate from './Components/Allocate-class';
+import Allocate from './Components/Allocate-class';
 import Navbar from './Components/Navbar'
 import Login from './Components/Login';
 import AdminRegister from './Components/AdminRegister';
@@ -13,6 +12,8 @@ import StudentRegister from './Components/StudentRegister';
 import TeacherRegister from './Components/TeacherRegister';
 import Home from './Components/Home';
 import Attendance from './Components/Attendance';
+import ClassRoom from './Components/ClassRoom';
+import { useState, useEffect } from 'react';
 
 
 // <Route exact path='/' element={<Home />} />
@@ -36,6 +37,12 @@ import Attendance from './Components/Attendance';
 
 
 function App() {
+  const [user, setUser] = useState('');
+  useEffect(() => {
+    const ans = localStorage.getItem("USER");
+    setUser(ans ? JSON.parse(ans) : null);
+  }, []);
+
   return (
     <>
       <Routes>
@@ -44,10 +51,17 @@ function App() {
         <Route exact path='/attendance' element={<Attendance />} />
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/adminregister' element={<AdminRegister />} />
-        <Route exact path='/studentregister' element={<StudentRegister />} />
-        <Route exact path='/teacherregister' element={<TeacherRegister />} />
+        { user.isStudent ?
+          <><Route exact path='/studentregister' element={<StudentRegister />} /></>:""
+        }
+        { user.isTeacher ?
+          <><Route exact path='/teacherregister' element={<TeacherRegister />} /></>:""
+        }
+        { user.isAdmin ?
+          <><Route exact path='/classroom' element={<ClassRoom />} /></>:""
+        }
       </Routes>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }

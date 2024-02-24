@@ -2,21 +2,50 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useAuth } from './store/auth'
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 export default function AdminRegister() {
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
+    const {person,storeTokenInLS} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [mail, setMail] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!username || !password || !mail) {
+            return notifyA("All Fields Are Required!!!");
+        }
         try {
+            const response = await fetch("http://localhost:8000/register", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    mail,
+                    password,
+                    type:person
+                    }),
+            });
 
-        } catch (error) {
-            console.error("Error during login:", error);
-            alert("An error occurred during login. Please try again.");
+            if (response.status === 200) {
+                const res_data = await response.json();
+                console.log("response from server ", res_data);
+                storeTokenInLS(res_data.token);
+                notifyB("Registration Successfull !!!");
+                navigate("/login");
+            } else {
+                return notifyA("Username Already Exist!!!");
+            }
+        }
+        catch (error) {
+            notifyA(error);
         }
     };
 
@@ -34,8 +63,8 @@ export default function AdminRegister() {
                         </div>
                         <div className="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value={email}
-                                onChange={(e) => setEmail(e.target.value)} required />
+                            <input type="email" id="email" name="email" value={mail}
+                                onChange={(e) => setMail(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
@@ -43,7 +72,7 @@ export default function AdminRegister() {
                                 onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="form-group">
-                            <button type="submit">Login</button>
+                            <button type="submit">SignUp</button>
                         </div>
                     </form>
                 </div>

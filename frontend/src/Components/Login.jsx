@@ -2,24 +2,48 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useAuth } from './store/auth'
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Login() {
-    const {person} = useAuth();
+    const {person,storeTokenInLS} = useAuth();
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [mail, setmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
 
     // username, password, type
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+         if (!password || !mail) {
+            return notifyA("All Fields are Required!!!")
+        }
         try {
-
+            const response = await fetch("http://localhost:8000/signin", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    mail: mail,
+                    password: password,
+                    type:person
+                })
+            })
+            if (response.status === 200) {
+                const res_data = await response.json();
+                // console.log("response from server ", res_data);
+                storeTokenInLS(res_data.token);
+                // console.log(isLoggedIn);
+                notifyB("Login Successfull");
+                navigate('/');
+            }
+            else {
+                return notifyA("Invalid Credentials!!!")
+            }
         } catch (error) {
-            console.error("Error during login:", error);
-            alert("An error occurred during login. Please try again.");
+            console.log(error);
         }
     };
 
@@ -31,9 +55,9 @@ export default function Login() {
                 <div className="form-body">
                     <form id="registerForm" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label for="username">Username:</label>
-                            <input type="username" id="username" name="username" value={username}
-                                onChange={(e) => setUsername(e.target.value)} required />
+                            <label for="username">E-mail:</label>
+                            <input type="username" id="username" name="username" value={mail}
+                                onChange={(e) => setmail(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>

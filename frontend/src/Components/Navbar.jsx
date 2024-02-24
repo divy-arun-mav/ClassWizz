@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './store/auth';
 export default function Navbar() {
-    const {isLoggedIn,LogoutUser, token,setPerson, person} = useAuth();
-    const [user,setUser] = useState(null);
+    const { isLoggedIn, LogoutUser, token, setPerson, person } = useAuth();
+    const [user, setUser] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         const ans = localStorage.getItem("USER");
@@ -26,27 +26,34 @@ export default function Navbar() {
                             <li className="nav-item">
                                 <Link className="nav-link active" aria-current="page" to='/'>Home</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/'>Assignments</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/'>Attendance</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/'>M</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/about'>Schedule</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/private/contact'>Add_Assignment</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/private/history'>DashBoard</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to='/private/payment'>Attendance</Link>
-                            </li>
+                            {
+                                user.isStudent ? <><li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to='/'>Assignments</Link>
+                                </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to='/'>Attendance</Link>
+                                    </li></> : ""
+                            }
+
+                            {user.isAdmin ? <><li className="nav-item">
+                                <Link className="nav-link active" aria-current="page" to='/'>Manage</Link>
+                            </li></> : ""}
+
+                            {
+                                user.isTeacher ? <><li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to='/about'>Schedule</Link>
+                                </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to='/private/contact'>Add_Assignment</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to='/private/history'>DashBoard</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to='/private/payment'>Attendance</Link>
+                                    </li></> : ""
+                            }
+
                             <li className="nav-item">
                                 <select value={person} onChange={(e) => { setPerson(e.target.value) }}>
                                     <option value="Teacher">Teacher</option>
@@ -56,9 +63,9 @@ export default function Navbar() {
                             </li>
                         </ul>
                         <form className="d-flex fs-6 fw-medium ms-auto">
-                            {/* {isLoggedIn ? <>                            <h6 className='my-auto text-primary text-center me-2'>{user.username}</h6> <button className="btn btn-outline-danger ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/private/logout') }}>LogOut</button>
+                            {isLoggedIn ? <>                            <h6 className='my-auto text-primary text-center me-2'>{user.username}</h6> <button className="btn btn-outline-danger ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/private/logout') }}>LogOut</button>
                             </> : <> <button className="btn btn-outline-primary ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/login') }}>Login</button>
-                                <button className="btn btn-outline-success ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/register') }}>SignUp</button></>} */}
+                                {user.isStudent ? <><button className="btn btn-outline-success ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/studentregister') }}>SignUp</button></> : ""}{user.isTeacher ? <><button className="btn btn-outline-success ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/teacherregister') }}>SignUp</button></> : ""}{user.isAdmin ? <><button className="btn btn-outline-success ms-2 fw-semibold" type="submit" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/adminregister') }}>SignUp</button></> : ""}</>}
                         </form>
                     </div>
                 </div>
