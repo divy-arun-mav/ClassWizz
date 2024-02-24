@@ -8,7 +8,8 @@ const Admin = require('../models/Admin');
 
 router.post('/signin', service.signin);
 router.post('/signup', service.signup);
-router.get('/getclassroom', authMiddleware(Teacher), service.getclass);
+// router.get('/getclassroom', authMiddleware(Teacher), service.getclass);
+router.get('/getclassroom', service.getclass);
 router.put('/updateclass', authMiddleware(Teacher), service.updateclass);
 router.get('/user1', authMiddleware(Teacher), service.user);
 router.get('/user2', authMiddleware(Student), service.user);

@@ -14,23 +14,31 @@ import ClassRoom from './Components/ClassRoom';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null); // Initialize with null
+
+  let ans;
 
   useEffect(() => {
-    const ans = localStorage.getItem('USER');
-    setUser(ans ? JSON.parse(ans) : {});
+    ans = localStorage.getItem('USER');
+    setUser(ans ? JSON.parse(ans) : null);
   }, []);
 
   return (
     <>
       <Routes>
-        <Route exact path='/navbar' element={<Navbar />} />
+        <Route exact path='/navbar' element={<Navbar user={user} />} />
         <Route exact path='/' element={<Home />} />
         <Route exact path='/login' element={<Login />} />
-        <Route exact path='/adminregister' element={<AdminRegister />} />
-        {user && user.isStudent && <Route exact path='/studentregister' element={<StudentRegister />} />}
-        {user && user.isTeacher && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
-        {user && user.isAdmin && <Route exact path='/classroom' element={<ClassRoom />} />}
+        
+        <Route exact path='/classroom' element={<ClassRoom />} />
+        
+        {ans && (
+          <>
+            {user && user.isStudent && <Route exact path='/studentregister' element={<StudentRegister />} />}
+            {user && user.isTeacher && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
+            {user && user.isAdmin && <Route exact path='/adminregister' element={<AdminRegister />} />}
+          </>
+        )}
       </Routes>
       <ToastContainer />
     </>
