@@ -3,40 +3,28 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { useAuth } from './store/auth';
 import Navbar from './Navbar';
 
-const data = [
-    { id: 0, value: 20, label: 'Absenties' },
-    { id: 1, value: 80, label: 'Presenties' },
-];
-
 export default function Attendance() {
+    const { token, USER } = useAuth();
+    const [attendanceData, setAttendanceData] = useState([]);
 
-    const { token, USER } = useAuth();  
-
-    const [sdate, setSdate] = useState(new Date());
-    const [edate, setEdate] = useState(new Date());  
-
-    const data = localStorage.getItem("USER");
-    const userData = JSON.parse(data);
-
-    const uri = `http://localhost:8000/getattendance?student_id=${userData._id}`
+    const userData = JSON.parse(localStorage.getItem("USER"));
+    const uri = `http://localhost:8000/getattendance?student_id=${userData._id}`;
 
     const getAttendance = async () => {
-
         try {
-            const attendance = await fetch(uri, {
+            const response = await fetch(uri, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-            })
+            });
 
-            if (attendance.status === 200) {
-                const parseData = await attendance.json();
-                console.log("API Data:", parseData.totalAttendancePercentage);
-
+            if (response.status === 200) {
+                const parsedData = await response.json();
+                setAttendanceData(parsedData); // Assuming the API response is an array of data
             } else {
-                console.error('Failed to fetch attendance history:', attendance.status);
+                console.error('Failed to fetch attendance history:', response.status);
             }
         } catch (error) {
             console.log('Error fetching attendance history:', error);
@@ -51,17 +39,21 @@ export default function Attendance() {
         <>
             <Navbar />
             <div className='container'>
-            <h1>Student Attendance Portal</h1>
-                {/* <PieChart
-                series={[
-                    {
-                        data,
-                        highlightScope: { faded: 'global', highlighted: 'item' },
-                        faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                    },
-                ]}
-                height={200}
-                /> */}
+                <h1>Student Attendance Portal</h1>
+                <PieChart
+                    series={[
+                        {
+                            data: attendanceData.map(item => ({
+                                id: item.sub_name,  // Assuming sub_name is unique for each subject
+                                value: item.presentLec + item.absentLec,
+                                label: item.sub_name,
+                            })),
+                            highlightScope: { faded: 'global', highlighted: 'item' },
+                            faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                        },
+                    ]}
+                    height={200}
+                />
             </div>
 
             <style>
