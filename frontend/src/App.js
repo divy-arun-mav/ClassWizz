@@ -12,6 +12,7 @@ import TeacherRegister from './Components/TeacherRegister';
 import Home from './Components/Home';
 import ClassRoom from './Components/ClassRoom';
 import { useState, useEffect } from 'react';
+import Attendance from './Components/Attendance';
 
 function App() {
   const [user, setUser] = useState(null); // Initialize with null
@@ -29,7 +30,7 @@ function App() {
         <Route exact path='/navbar' element={<Navbar user={user} />} />
         <Route exact path='/' element={<Home />} />
         <Route exact path='/login' element={<Login />} />
-        
+        <Route exact path='/attendance' element={<Attendance />} />
         <Route exact path='/classroom' element={<ClassRoom />} />
         
         {ans && (
