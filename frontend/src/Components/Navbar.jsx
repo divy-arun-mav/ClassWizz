@@ -72,7 +72,9 @@ export default function Navbar({ user }) {
                                 ) : (
                                     <>
                                         <button className="btn btn-outline-primary ms-2 fw-semibold" type="button" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/login') }}>Login</button>
-                                        <button className="btn btn-outline-success ms-2 fw-semibold" type="button" style={{ maxHeight: "min-content" }} onClick={() => { navigate('/studentregister') }}>Sign Up</button>
+                                            <button className="btn btn-outline-success ms-2 fw-semibold" type="button" style={{ maxHeight: "min-content" }} onClick={() => {
+                                                person === "Student" ? navigate('/studentregister') : person === "Teacher" ? navigate('/teacherregister') : navigate('/adminregister')
+                                            }}>Sign Up</button>
                                     </>
                                 )}
                             </form>

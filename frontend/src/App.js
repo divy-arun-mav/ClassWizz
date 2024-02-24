@@ -9,7 +9,6 @@ import StudentRegister from './Components/StudentRegister';
 import TeacherRegister from './Components/TeacherRegister';
 import Home from './Components/Home';
 import ClassRoom from './Components/ClassRoom';
-import { useState, useEffect } from 'react';
 import Attendance from './Components/Attendance';
 import { useAuth } from './Components/store/auth';
 
@@ -20,13 +19,13 @@ function App() {
   useEffect(() => {
     const ans = localStorage.getItem('USER');
     setUser(ans ? JSON.parse(ans) : null);
+    console.log("PERSON", person);
   }, []);
-  // console.log("PERSON",person);
 
   return (
     <>
       <Routes>
-        <Route exact path='/navbar' element={<Navbar user={user} />} />
+        <Route exact path='/navbar' element={<Navbar />} />
         <Route exact path='/' element={<Home />} />
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/attendance' element={<Attendance />} />
