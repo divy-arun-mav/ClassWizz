@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 exports.signin = async (req, res) => {
     const { mail, password, type } = req.body;
   
-    if (!mail || !password) {
+    if (!mail || !password || !type) {
       return res.status(422).json({ error: "Please provide a valid username and password" });
     }
   
@@ -124,7 +124,7 @@ exports.signin = async (req, res) => {
             return res.status(422).json({ error: 'Invalid user type' });
         }
 
-        const existingUser = await (userType === 'admin' ? Admin : (userType === 'student' ? Student : Teacher)).findOne({
+        const existingUser = await (userType === 'Admin' ? Admin : (userType === 'Student' ? Student : Teacher)).findOne({
             $or: [{ username: username }, { mail: mail }]
         });
 
@@ -135,8 +135,8 @@ exports.signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const user = userType === 'admin' ? new Admin({ username, password: hashedPassword, mail })
-          : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, student_id, branch, yos })
+        const user = userType === 'Admin' ? new Admin({ username, password: hashedPassword, mail })
+          : (userType === 'Student' ? new Student({ username, password: hashedPassword, mail, student_id, branch, yos })
             : new Teacher({ username, password: hashedPassword, mail, teacher_id, subject }));
 
         user.save().then(async (user) => {
