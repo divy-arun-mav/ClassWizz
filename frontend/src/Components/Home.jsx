@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import back from '../assets/EduManager.png';
 import backres from '../assets/EduManagerResponsive.png';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const Home = () => {
 
@@ -35,6 +36,7 @@ const Home = () => {
                 <button className='explore-more2'>Explore More</button>
                 <button className='experience-it3'>Experience It</button>
             </div>
+            <Footer />
             <style>
                 {`
                 body{
@@ -45,8 +47,9 @@ const Home = () => {
                     justify-content:center;
                     align-items:center;
                     flex-direction:column;
+                    
                 }
-                button{
+                .btn-grp button{
                     background-color:skyblue;
                     border:0.5px solid white;
                     border-radius:10px;
@@ -55,32 +58,33 @@ const Home = () => {
                     font-size:25px;
                     color:white;
                     position:relative;
-                    box-shadow: 5px 7px 10px purple;
+                    box-shadow: 2px 4px 10px purple;
                     cursor:pointer;
+                    z-index:-1;
                 }
                 .experience-it1{
-                    top:600px;
+                    top:650px;
                     right:400px;
                 }
                 .explore-more1{
-                    top:1300px;
+                    top:1350px;
                 }
                 .experience-it2{
-                    top:2000px;
+                    top:2050px;
                     right:400px;
                 }
                 .explore-more2{
-                    top:2700px;
+                    top:2750px;
                 }
                 .experience-it3{
-                    top:3400px;
+                    top:3450px;
                     right:400px;
                 }
                 img{
                     position:absolute;
                     top:0;
                     left:0;
-                    z-index:-1;
+                    z-index:-2;
                     width:100%;
                     user-drag: none;
                     -webkit-user-drag: none;
@@ -110,6 +114,29 @@ const Home = () => {
                     .experience-it3{
                         top:2830px;
                         right:400px;
+                    }
+                    }
+                    @media screen and (max-width:720px){
+                    img{
+                        width:100%;
+                    }
+                    .experience-it1{
+                        top:780px;
+                        right:0;
+                    }
+                    .explore-more1{
+                        top:1600px;
+                    }
+                    .experience-it2{
+                        top:2400px;
+                        right:0;
+                    }
+                    .explore-more2{
+                        top:3260px;
+                    }
+                    .experience-it3{
+                        top:4080px;
+                        right:0;
                     }
                     }
                 `}
