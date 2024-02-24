@@ -5,6 +5,6 @@ const service = require('../controllers/service');
 
 router.post('/signIn', service.signin);
 router.post('/signUp', service.signup);
-
+router.get('/user', authMiddleware, service.user)
 
 module.exports = router;

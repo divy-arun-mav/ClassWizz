@@ -93,6 +93,16 @@ exports.signin = async (req, res) => {
     }
   };
 
+  exports.user = async (req, res) => {
+    try {
+      const userData = req.User;
+      console.log(userData);
+      res.status(200).json({ msg: userData })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   
 
   exports.signup = async (req, res) => {
