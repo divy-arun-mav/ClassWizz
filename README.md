@@ -1,1 +1,1 @@
-# ClassWizz
+# EduManager
