@@ -5,6 +5,9 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function AdminRegister() {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,8 +20,6 @@ export default function AdminRegister() {
         }
     };
 
-
-    const [pass, setPass] = useState('');
     return (
         <>
             <Navbar />
@@ -28,21 +29,18 @@ export default function AdminRegister() {
                     <form id="registerForm" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required />
+                            <input type="username" id="username" name="username" value={username}
+                                onChange={(e) => setUsername(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="email" id="email" name="email" value={email}
+                                onChange={(e) => setEmail(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
-                        </div>
-                        <div className="checkbox-area">
-                            <label htmlFor="admin-check">register as admin</label>
-                            <input type="checkbox" name="register as admin" id="admin-check" />
+                            <input type="password" id="password" name="password" value={password}
+                                onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <button type="submit">Login</button>

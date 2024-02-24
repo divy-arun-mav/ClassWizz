@@ -5,6 +5,11 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function StudentRegister() {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [studentId, setStudentId] = useState('');
+    const [branch, setBranch] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,32 +37,28 @@ export default function StudentRegister() {
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="password" id="password" name="password" value={password}
+                                onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="email" id="email" name="email" value={email}
+                                onChange={(e) => setEmail(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="student-id">Student ID:</label>
-                            <input type="student-id" id="student-id" name="student-id" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="student-id" id="student-id" name="student-id" value={studentId}
+                                onChange={(e) => setStudentId(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="branch">Branch:</label>
-                            <input type="branch" id="branch" name="branch" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="branch" id="branch" name="branch" value={branch}
+                                onChange={(e) => setBranch(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="yos">Year Of Study:</label>
                             <input type="yos" id="yos" name="yos" value={pass}
                                 onChange={(e) => setPass(e.target.value)} required />
-                        </div>
-                        <div className="checkbox-area">
-                            <label htmlFor="admin-check">register as student</label>
-                            <input type="checkbox" name="register as admin" id="admin-check" />
                         </div>
                         <div className="form-group">
                             <button type="submit">Login</button>
@@ -123,6 +124,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin:20px 0;
 }
 
 button:hover {
