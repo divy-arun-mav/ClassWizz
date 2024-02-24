@@ -25,7 +25,7 @@ export default function Navbar() {
                                 <Link className="nav-link active" aria-current="page" to='/'>Attendance</Link>
                             </li>
                             <li className="nav-item" style={{ "margin-inline": "10px" }}>
-                                <Link className="nav-link active" aria-current="page" to='/'>Manage</Link>
+                                <Link className="nav-link active" aria-current="page" to='/'>M</Link>
                             </li>
                             <li className="nav-item" style={{ "margin-inline": "10px" }}>
                                 <Link className="nav-link active" aria-current="page" to='/about'>Schedule</Link>
