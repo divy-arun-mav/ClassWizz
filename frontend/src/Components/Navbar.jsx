@@ -14,9 +14,9 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg" style={{ maxHeight: "50px" }}>
+            <nav className="navbar navbar-expand-lg" style={{ maxHeight: "50px", maxWidth: "100%" }}>
                 <div className="container-fluid" style={{ background: "rgba(255, 255, 255, 0.8)" }}>
-                    <a className="navbar-brand fs-4 fw-bolder text-primary">EduManager</a>
+                    <a className="navbar-brand fs-4 fw-bolder" style={{ color: "purple" }}>EduManager</a>
                     <button className="navbar-toggler " style={{ "border": "2px solid black" }} type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon "></span>
                     </button>
@@ -75,6 +75,9 @@ export default function Navbar() {
                 padding: 0;
                 box-sizing: border-box;
                 font-family: 'Poppins', sans-serif;
+              }
+              body{
+                overflow-x:hidden;
               }
               li{
                 margin-inline: 10px;
