@@ -15,13 +15,17 @@ const teacherSchema = new Schema({
         type: String,
         required: true,
     },
-    id:{
+    teacher_id:{
         type: String,
         required: true,
     },
     subject:{
         type: String,
         required: true,
+    },
+    isTeacher: {
+        type: Boolean,
+        default: true
     }
 });
 
@@ -29,13 +33,14 @@ teacherSchema.methods.generateToken = async function () {
     try {
         return jwt.sign(
             {
-                userId: this._id.toString(),
+                _id: this._id.toString(),
                 username: this.username,
+                user_type: "Teacher",
             },
             process.env.JWT_SECRET_KEY,
             {
                 expiresIn: "30d",
-            }
+            },
         );
     } catch (error) {
         console.error("Token Error: ", error);

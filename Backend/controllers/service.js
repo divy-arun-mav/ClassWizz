@@ -1,9 +1,10 @@
 require('dotenv').config()
+const Classroom = require("../models/Classroom")
 const Student = require('../models/Student');
 const Admin = require('../models/Admin');
 const Teacher = require('../models/Teacher');
 const bcrypt = require('bcrypt')
-const authMiddleware = require('../middlewares/auth');
+const authMiddleware = require('../middlewares/teacherAuth');
 const jwt = require('jsonwebtoken')
 
 exports.signin = async (req, res) => {
@@ -106,7 +107,7 @@ exports.signin = async (req, res) => {
   
 
   exports.signup = async (req, res) => {
-    const { username, password, mail, type, branch, yos, id, subject } = req.body;
+    const { username, mail, subject, teacher_id, student_id, type, password , branch , yos } = req.body;
 
     if (!username || !password) {
         console.log('Please add all the required fields');
@@ -139,14 +140,14 @@ exports.signin = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = userType === 'admin' ? new Admin({ username, password: hashedPassword, mail })
-            : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, id, branch, yos })
-                : new Teacher({ username, password: hashedPassword, mail, id,subject }));
+          : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, student_id, branch, yos })
+            : new Teacher({ username, password: hashedPassword, mail, teacher_id, subject }));
 
         user.save().then(async (user) => {
             return res.json({
                 message: "Registered Successfully",
                 token: await user.generateToken(),
-                userId: user._id.toString(),
+              userId: user._id,
                 userType: userType
             });
         }).catch(err => {
@@ -158,3 +159,52 @@ exports.signin = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+
+
+
+exports.getclass = async (req, res) => {
+  try {
+    const classrooms = await Classroom.find({ isReserved: true });
+
+    if (classrooms.length == 0) {
+      console.log("No classes found with isReserved set to false");
+      return res.status(404).json({ error: "No classes found" });
+    }
+
+    console.log("Classes with isReserved set to false:", classrooms);
+    res.status(200).json({ classrooms });
+  } catch (e) {
+    console.error("Error:", e);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.updateclass = async (req, res) => {
+  const { id } = "65d9bc4bad644bba959fac50";
+
+  if (!req.Teacher || !req.Teacher.username) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const { username: faculty_name } = req.Teacher;
+
+  try {
+    const classroom = await Classroom.findOneAndUpdate(
+      { _id: "65d9bc4bad644bba959fac50" },
+      { $set: { isReserved: true, faculty_name } },
+      { useFindAndModify: false, new: true }
+    );
+
+    if (!classroom) {
+      return res.status(404).json({ message: 'No reserved classrooms found.' });
+    }
+
+    res.status(200).json({ message: 'Classroom updated successfully', classroom });
+  } catch (e) {
+    console.log(e);
+
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+

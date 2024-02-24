@@ -15,7 +15,7 @@ const studentSchema = new Schema({
         type: String,
         required: true,
     },
-    id:{
+    student_id:{
         type: String,
         required: true,
     },
@@ -26,6 +26,10 @@ const studentSchema = new Schema({
     yos:{
         type: Number,
         required: true, 
+    },
+    isStudent: {
+        type: Boolean,
+        default:true
     }
 });
 
@@ -33,8 +37,9 @@ studentSchema.methods.generateToken = async function () {
     try {
         return jwt.sign(
             {
-                userId: this._id.toString(),
+                _id: this._id.toString(),
                 username: this.username,
+                user_type: "Student",
             },
             process.env.JWT_SECRET_KEY,
             {
