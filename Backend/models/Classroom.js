@@ -3,6 +3,18 @@ const Schema = mongoose.Schema;
 
 const classroomSchema = new Schema({
     classroom_no: {
+        type: Number,
+        required: true,
+    },
+    faculty_name: {
+        type: String,
+        required: true
+    },
+    strength: {
+        type: Number,
+        required: true
+    },
+    facility: {
         type: String,
         required: true,
     },
@@ -10,16 +22,16 @@ const classroomSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
-    },
-    isLab: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    reservedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'teacher',
     }
+    // isLab: {
+    //     type: Boolean,
+    //     required: true,
+    //     default: false
+    // },
+    // reservedBy: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'teacher',
+    // }
 });
 
 const Classroom = mongoose.model("classroom", classroomSchema);

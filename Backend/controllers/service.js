@@ -97,7 +97,7 @@ exports.signin = async (req, res) => {
   
 
   exports.signup = async (req, res) => {
-    const { username, password, mail, type, branch, yos, id, subject } = req.body;
+    const { username, mail, subject, teacher_id, student_id, type, password } = req.body;
 
     if (!username || !password) {
         console.log('Please add all the required fields');
@@ -130,14 +130,14 @@ exports.signin = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = userType === 'admin' ? new Admin({ username, password: hashedPassword, mail })
-            : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, id, branch, yos })
-                : new Teacher({ username, password: hashedPassword, mail, id,subject }));
+          : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, student_id, branch, yos })
+            : new Teacher({ username, password: hashedPassword, mail, teacher_id, subject }));
 
         user.save().then(async (user) => {
             return res.json({
                 message: "Registered Successfully",
                 token: await user.generateToken(),
-                userId: user._id.toString(),
+              userId: user._id,
                 userType: userType
             });
         }).catch(err => {
@@ -150,20 +150,44 @@ exports.signin = async (req, res) => {
     }
 };
 
-exports.setclass = async (req, res) => {
-  const { classroom_no ,faculty_name, subject, strength, location, facility } = req.body;
 
-  if (!classroom_no || !faculty_name || !subject || !strength || !location || !facility) {
-    res.status(422).json({ error: "Please enter all the fields" });
-  }
+
+
+exports.getclass = async (req, res) => {
   try {
-    const classroom = await Classroom.findOne({ classroom_no });
-    if (!classroom) { 
-      res.status(500).json("Internal Server Error")
+    const classrooms = await Classroom.find({ isReserved: false });
+
+    if (classrooms.length == 0) {
+      console.log("No classes found with isReserved set to false");
+      return res.status(404).json({ error: "No classes found" });
     }
-    res.status(200).json({ classroom });
+
+    console.log("Classes with isReserved set to false:", classrooms);
+    res.status(200).json({ classrooms });
   } catch (e) {
-    console.error(e);
+    console.error("Error:", e);
     res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
+// exports.updateclass = async (req, res) => {
+//   const { classroom_no, strength } = req.body;
+//   try {
+//     const classroom = await Classroom.findOneAndUpdate(
+//     {classroom_no,strength},
+//       { $set:{isReserved: true} },
+//       { useFindAndModify: false, new: true }
+//     );
+
+//     if (!classroom) {
+//       return res.status(404).json({ message: 'No reserved classrooms found.' });
+//     }
+
+//     res.status(200).json({ message: 'Classroom updated successfully', classroom });
+//   } catch (e) {
+//     console.log(e);
+
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+

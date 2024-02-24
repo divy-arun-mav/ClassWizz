@@ -15,15 +15,11 @@ const teacherSchema = new Schema({
         type: String,
         required: true,
     },
-    id:{
+    teacher_id:{
         type: String,
         required: true,
     },
     subject:{
-        type: String,
-        required: true,
-    },
-    classroom: {
         type: String,
         required: true,
     }
@@ -35,6 +31,7 @@ teacherSchema.methods.generateToken = async function () {
             {
                 userId: this._id.toString(),
                 username: this.username,
+                user
             },
             process.env.JWT_SECRET_KEY,
             {
