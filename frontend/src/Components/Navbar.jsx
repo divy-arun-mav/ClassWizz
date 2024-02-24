@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './store/auth';
+import logo from "../assets/Logo.png";
 
 export default function Navbar({ user }) {
     const { isLoggedIn, LogoutUser, setPerson, person } = useAuth();
     const navigate = useNavigate();
+
+    const data = localStorage.getItem("USER");
+    const userData = JSON.parse(data);
 
     return (
         <>
             <div className="nav-cont">
                 <nav style={{ maxHeight: "100%", maxWidth: "100%", backgroundColor: "rgba(255,255,255,0.3)" }} className="navbar navbar-expand-lg">
                     <div className="container-fluid">
-                        <a className="navbar-brand fs-4 fw-bolder" style={{ color: "purple" }}>EduManager</a>
+                        <Link className="navbar-brand fs-4 fw-bolder" style={{ color: "purple" }} to='/'>
+                            <img src={logo} alt="logo" className='logo' id="logo" />
+                        </Link>
                         <button className="navbar-toggler " style={{ "border": "2px solid black" }} type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon "></span>
                         </button>
@@ -20,9 +26,9 @@ export default function Navbar({ user }) {
                                 <li className="nav-item">
                                     <Link className="nav-link active" aria-current="page" to='/'>Home</Link>
                                 </li>
-                                {user && (
+                                {userData && (
                                     <>
-                                        {user.isStudent && (
+                                        {userData.isStudent && (
                                             <>
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/assignments'>Assignments</Link>
@@ -32,12 +38,12 @@ export default function Navbar({ user }) {
                                                 </li>
                                             </>
                                         )}
-                                        {user.isAdmin && (
+                                        {userData.isAdmin && (
                                             <li className="nav-item">
                                                 <Link className="nav-link active" aria-current="page" to='/manage'>Manage</Link>
                                             </li>
                                         )}
-                                        {user.isTeacher && (
+                                        {userData.isTeacher && (
                                             <>
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/schedule'>Schedule</Link>
@@ -66,7 +72,7 @@ export default function Navbar({ user }) {
                             <form className="d-flex fs-6 fw-medium ms-auto">
                                 {isLoggedIn ? (
                                     <>
-                                        <h6 className='my-auto text-primary text-center me-2'>{user.username}</h6>
+                                        {/* <h6 className='my-auto text-primary text-center me-2'>{userData.username}</h6> */}
                                         <button className="btn btn-outline-danger ms-2 fw-semibold" type="button" style={{ maxHeight: "min-content" }} onClick={() => { LogoutUser(); navigate('/login') }}>Logout</button>
                                     </>
                                 ) : (
@@ -99,6 +105,9 @@ export default function Navbar({ user }) {
           position: fixed;
           top: 0;
           left: 0;
+        }
+        .logo{
+            width:200px;
         }
         li {
           margin-inline: 10px;

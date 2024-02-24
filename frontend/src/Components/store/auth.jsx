@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const LogoutUser = () => {
         setToken("");
         localStorage.removeItem("token");
+        localStorage.removeItem("USER");
     }
 
     const userAuthentication = async () => {

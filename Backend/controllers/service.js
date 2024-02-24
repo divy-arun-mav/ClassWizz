@@ -3,8 +3,11 @@ const Classroom = require("../models/Classroom")
 const Student = require('../models/Student');
 const Admin = require('../models/Admin');
 const Teacher = require('../models/Teacher');
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const Attendance = require('../models/Attendance');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Subject = require('../models/Subject');
+const mongoose = require('mongoose');
 
 exports.signin = async (req, res) => {
   const { mail, password, type } = req.body;
@@ -215,3 +218,97 @@ exports.updateclass = async (req, res) => {
   }
 };
 
+exports.putAttendance = async (req, res) => {
+  const { student_id, sub_name, presentLec, totalLec } = req.body;
+
+  try {
+    const student = await Student.findOne({ student_id });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    const existingAttendance = student.attendance.find(att => att.sub_name === sub_name);
+
+    if (existingAttendance) {
+      existingAttendance.presentLec += presentLec;
+      existingAttendance.totalLec += totalLec;
+      existingAttendance.timestamp = Date.now();
+    } else {
+      student.attendance.push({
+        sub_name,
+        presentLec,
+        totalLec,
+        timestamp: Date.now(),
+      });
+    }
+
+    await student.save();
+
+    res.status(200).json({ message: "Attendance updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getAttendanceForStudent = async (req, res) => {
+  const { student_id } = req.body;
+  console.log("USERID:", student_id);
+  try {
+    const student = await Student.findOne({ student_id });
+    console.log("STU:",student)
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    const attendanceData = student.attendance;
+    const totalAttendancePercentage = calculateTotalAttendancePercentage(attendanceData);
+    const subjectWiseAttendance = calculateSubjectWiseAttendance(attendanceData);
+
+    console.log(attendanceData);
+    console.log(totalAttendancePercentage);
+    console.log(subjectWiseAttendance)
+
+    res.status(200).json({
+      attendanceData,
+      totalAttendancePercentage,
+      subjectWiseAttendance,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Function to calculate total attendance percentage
+const calculateTotalAttendancePercentage = (attendanceData) => {
+  if (attendanceData.length === 0) {
+    return 0; // To avoid division by zero
+  }
+
+  const totalPresentLectures = attendanceData.reduce((total, entry) => total + entry.presentLec, 0);
+  const totalAbsentLectures = attendanceData.reduce((total, entry) => total + entry.totalLec, 0);
+  const totalLectures = totalPresentLectures + totalAbsentLectures;
+
+  const totalAttendancePercentage = (totalPresentLectures / totalLectures) * 100;
+  return totalAttendancePercentage.toFixed(2); // Rounding to two decimal places
+};
+
+// Function to calculate subject-wise attendance percentages
+const calculateSubjectWiseAttendance = (attendanceData) => {
+  const subjectWiseAttendance = {};
+
+  attendanceData.forEach((entry) => {
+    const { sub_name, presentLec, totalLec } = entry;
+
+    if (totalLec > 0) {
+      const subjectAttendancePercentage = (presentLec / totalLec) * 100;
+      subjectWiseAttendance[sub_name] = subjectAttendancePercentage.toFixed(2);
+    } else {
+      subjectWiseAttendance[sub_name] = "N/A"; // Not applicable when total lectures are zero
+    }
+  });
+
+  return subjectWiseAttendance;
+};

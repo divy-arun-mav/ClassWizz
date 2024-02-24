@@ -15,22 +15,37 @@ const studentSchema = new Schema({
         type: String,
         required: true,
     },
-    student_id:{
+    student_id: {
         type: String,
         required: true,
     },
-    branch:{
+    branch: {
         type: String,
         required: true,
     },
-    yos:{
+    yos: {
         type: Number,
-        required: true, 
+        required: true,
     },
     isStudent: {
         type: Boolean,
-        default:true
-    }
+        default: true
+    },
+    attendance: [{
+        sub_name: String,
+        presentLec: {
+            type: Number,
+            default: 0
+        },
+        totalLec: {
+            type: Number,
+            default: 0
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 });
 
 studentSchema.methods.generateToken = async function () {
@@ -39,6 +54,7 @@ studentSchema.methods.generateToken = async function () {
             {
                 _id: this._id.toString(),
                 username: this.username,
+                student_id:this.student_id,
                 user_type: "Student",
             },
             process.env.JWT_SECRET_KEY,

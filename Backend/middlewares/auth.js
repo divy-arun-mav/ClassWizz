@@ -20,6 +20,8 @@ const authMiddleware = (Model) => async (req, res, next) => {
             password: 0,
         });
 
+        console.log(userData);
+
         if (!userData) {
             console.log("User not found");
             return res.status(401).json({ message: "User not found" });
