@@ -161,12 +161,19 @@ exports.signup = async (req, res) => {
 
 exports.getclass = async (req, res) => {
   try {
-    const {strength} = req.params; 
+    const {strength} = req.query;
+    // console.log("STRENGTH:",strength);
+
+    if (isNaN(strength)) {
+      return res.status(400).json({ error: "Strength parameter must be a valid number" });
+    }
+
     const classrooms = await Classroom.find({
       isReserved: false,
-      strength: { $gte: strength } 
+      strength: { $gte: strength }
     });
-    if (classrooms.length == 0) {
+
+    if (classrooms.length === 0) {
       console.log("No classes found with isReserved set to false");
       return res.status(404).json({ error: "No classes found" });
     }
@@ -178,6 +185,7 @@ exports.getclass = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 exports.updateclass = async (req, res) => {
   const { id } = "65d9bc4bad644bba959fac50";
