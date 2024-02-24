@@ -12,6 +12,7 @@ import AdminRegister from './Components/AdminRegister';
 import StudentRegister from './Components/StudentRegister';
 import TeacherRegister from './Components/TeacherRegister';
 import Home from './Components/Home';
+import Attendance from './Components/Attendance';
 
 
 // <Route exact path='/' element={<Home />} />
@@ -40,6 +41,7 @@ function App() {
       <Routes>
         <Route exact path='/navbar' element={<Navbar />} />
         <Route exact path='/' element={<Home />} />
+        <Route exact path='/attendance' element={<Attendance />} />
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/adminregister' element={<AdminRegister />} />
         <Route exact path='/studentregister' element={<StudentRegister />} />
