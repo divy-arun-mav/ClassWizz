@@ -3,7 +3,8 @@ const router = express.Router();
 const service = require('../controllers/service');
 // const authMiddleware = require('../middlewares/authMiddleware')
 
-router.get('/payment_history_serviceProvider',authMiddleware, service.history);
+router.post('/signIn', service.signin);
+router.post('/signUp', service.signup);
 
 
 module.exports = router;

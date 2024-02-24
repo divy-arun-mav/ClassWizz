@@ -3,8 +3,8 @@ const app = express();
 const port = 8000;
 const routes = require('./routes/routers');
 const mongoConnect = require('./db');
-// const cookieParser = require('cookie-parser');
-// const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 

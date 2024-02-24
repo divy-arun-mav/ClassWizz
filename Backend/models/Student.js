@@ -46,5 +46,5 @@ studentSchema.methods.generateToken = async function () {
     }
 };
 
-const Student = mongoose.model("user", studentSchema);
+const Student = mongoose.model("student", studentSchema);
 module.exports = Student;

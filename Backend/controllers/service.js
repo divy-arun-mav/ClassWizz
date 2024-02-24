@@ -1,15 +1,21 @@
 require('dotenv').config()
+const Student = require('../models/Student');
+const Admin = require('../models/Admin');
+const Teacher = require('../models/Teacher');
+const bcrypt = require('bcrypt')
+const authMiddleware = require('../middlewares/auth');
+const jwt = require('jsonwebtoken')
 
 exports.signin = async (req, res) => {
-    const { username, password, isWhat } = req.body;
+    const { username, password, type } = req.body;
   
     if (!username || !password) {
       return res.status(422).json({ error: "Please provide a valid username and password" });
     }
   
-    if(isWhat=="Student"){
+    if(type=="admin"){
         try {
-            const user = await User.findOne({ username });
+            const user = await Admin.findOne({ username });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -33,9 +39,9 @@ exports.signin = async (req, res) => {
             return res.status(500).json({ error: "Internal server error" });
           }
     }
-    else if(isWhat=="Admin"){
+    else if(type=="teacher"){
         try {
-            const user = await User.findOne({ username });
+            const user = await Teacher.findOne({ username });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -61,7 +67,7 @@ exports.signin = async (req, res) => {
     }
     else{
         try {
-            const user = await User.findOne({ username });
+            const user = await Student.findOne({ username });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -86,43 +92,59 @@ exports.signin = async (req, res) => {
           }
     }
   };
+
   
+
   exports.signup = async (req, res) => {
-    const { username, phrase, password } = req.body;
-  
-    if (!username || !phrase || !password) {
-      console.log('Please add all the fields');
-      return res.status(422).json({ error: "Please add all the fields" });
+    const { username, password, mail, type, branch, yos, id, subject } = req.body;
+
+    if (!username || !password) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
     }
-  
+
     try {
-      const existingUser = await User.findOne({ $or: [{ phrase: phrase }, { username: username }] });
-  
-      if (existingUser) {
-        console.log('User already exists! with that username or email');
-        return res.status(422).json({ error: "User already exists! with that username or email" });
-      }
-  
-      const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User({
-        username,
-        phrase,
-        password: hashedPassword
-      });
-  
-      user.save().then(async user => {
-        return res.json({
-          message: "Registered Successfully",
-          token: await user.generateToken(),
-          userId: user._id.toString(),
+        let userType;
+
+        if (type === 'student') {
+            userType = 'student';
+        } else if (type === 'admin') {
+            userType = 'admin';
+        } else if (type === 'teacher') {
+            userType = 'teacher';
+        } else {
+            console.log('Invalid user type');
+            return res.status(422).json({ error: 'Invalid user type' });
+        }
+
+        const existingUser = await (userType === 'admin' ? Admin : (userType === 'student' ? Student : Teacher)).findOne({
+            $or: [{ username: username }, { mail: mail }]
         });
-      })
-        .catch(err => {
-          console.log(err);
-          return res.status(500).json({ error: "Internal server error" });
+
+        if (existingUser) {
+            console.log(`User already exists with that username or email (${userType} type)`);
+            return res.status(422).json({ error: `User already exists with that username or email (${userType} type)` });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const user = userType === 'admin' ? new Admin({ username, password: hashedPassword, mail })
+            : (userType === 'student' ? new Student({ username, password: hashedPassword, mail, id, branch, yos })
+                : new Teacher({ username, password: hashedPassword, mail, id,subject }));
+
+        user.save().then(async (user) => {
+            return res.json({
+                message: "Registered Successfully",
+                token: await user.generateToken(),
+                userId: user._id.toString(),
+                userType: userType
+            });
+        }).catch(err => {
+            console.log(err);
+            return res.status(500).json({ error: "Internal server error" });
         });
     } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Internal server error" });
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
     }
-  };
+};

@@ -42,5 +42,5 @@ teacherSchema.methods.generateToken = async function () {
     }
 };
 
-const Teacher = mongoose.model("user", teacherSchema);
+const Teacher = mongoose.model("teacher", teacherSchema);
 module.exports = Teacher;
