@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Teacher = require("../models/Teacher");
-const Student = require("../models/Student")
-const Admin = require("../models/Admin")
+const Student = require("../models/Student");
 
 const authMiddleware = async (req, res, next) => {
     const token = req.header('Authorization');
@@ -19,7 +17,8 @@ const authMiddleware = async (req, res, next) => {
         const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
         console.log("Decoded Token: ", isVerified);
 
-        const userData = await Teacher.findOne({ _id: isVerified.userId }).select({
+
+        const userData = await Student.findOne({ _id: isVerified._id }).select({
             password: 0,
         });
 
@@ -28,7 +27,9 @@ const authMiddleware = async (req, res, next) => {
             return res.status(401).json({ message: "User not found" });
         }
 
-        req.Teacher = userData;
+        console.log(userData);
+
+        req.Student = userData;
         req.token = token;
         req.userID = userData._id;
 

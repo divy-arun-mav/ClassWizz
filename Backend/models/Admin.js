@@ -14,6 +14,10 @@ const adminSchema = new Schema({
     mail: {
         type: String,
         required: true,
+    },
+    isAdmin: {
+        type: Boolean,
+        default:true
     }
 });
 
@@ -21,8 +25,9 @@ adminSchema.methods.generateToken = async function () {
     try {
         return jwt.sign(
             {
-                userId: this._id.toString(),
+                _id: this._id.toString(),
                 username: this.username,
+                user_type: "Admin",
             },
             process.env.JWT_SECRET_KEY,
             {
