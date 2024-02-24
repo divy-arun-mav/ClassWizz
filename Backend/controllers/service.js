@@ -4,19 +4,18 @@ const Student = require('../models/Student');
 const Admin = require('../models/Admin');
 const Teacher = require('../models/Teacher');
 const bcrypt = require('bcrypt')
-const authMiddleware = require('../middlewares/teacherAuth');
 const jwt = require('jsonwebtoken')
 
 exports.signin = async (req, res) => {
-    const { username, password, type } = req.body;
+    const { mail, password, type } = req.body;
   
-    if (!username || !password) {
+    if (!mail || !password) {
       return res.status(422).json({ error: "Please provide a valid username and password" });
     }
   
     if(type=="admin"){
         try {
-            const user = await Admin.findOne({ username });
+            const user = await Admin.findOne({ mail });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -42,7 +41,7 @@ exports.signin = async (req, res) => {
     }
     else if(type=="teacher"){
         try {
-            const user = await Teacher.findOne({ username });
+            const user = await Teacher.findOne({ mail });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -68,7 +67,7 @@ exports.signin = async (req, res) => {
     }
     else{
         try {
-            const user = await Student.findOne({ username });
+            const user = await Student.findOne({ mail });
         
             if (!user) {
               return res.status(422).json({ error: "Invalid username or password" });
@@ -96,15 +95,12 @@ exports.signin = async (req, res) => {
 
   exports.user = async (req, res) => {
     try {
-      const userData = req.User;
-      console.log(userData);
+      const userData = req.user;
       res.status(200).json({ msg: userData })
     } catch (error) {
       console.log(error)
     }
   }
-
-  
 
   exports.signup = async (req, res) => {
     const { username, mail, subject, teacher_id, student_id, type, password , branch , yos } = req.body;

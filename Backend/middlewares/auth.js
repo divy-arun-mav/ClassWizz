@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const Student = require("../models/Student");
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = (Model) => async (req, res, next) => {
     const token = req.header('Authorization');
 
     if (!token) {
@@ -17,8 +16,7 @@ const authMiddleware = async (req, res, next) => {
         const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
         console.log("Decoded Token: ", isVerified);
 
-
-        const userData = await Student.findOne({ _id: isVerified._id }).select({
+        const userData = await Model.findOne({ _id: isVerified._id }).select({
             password: 0,
         });
 
@@ -26,10 +24,8 @@ const authMiddleware = async (req, res, next) => {
             console.log("User not found");
             return res.status(401).json({ message: "User not found" });
         }
-
-        console.log(userData);
-
-        req.Student = userData;
+        console.log("From Auth:", userData)
+        req.user = userData;
         req.token = token;
         req.userID = userData._id;
 
@@ -38,6 +34,6 @@ const authMiddleware = async (req, res, next) => {
         console.log(error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
 
 module.exports = authMiddleware;

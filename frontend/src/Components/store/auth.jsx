@@ -5,7 +5,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [user, setUser] = useState("");
     let isLoggedIn = !!token;
 
 
@@ -21,20 +20,20 @@ export const AuthProvider = ({ children }) => {
 
     const userAuthentication = async () => {
         try {
-            const response = await fetch("http://localhost:8000/user", {
+            const response = await fetch("http://localhost:8000/user2", {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    // Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ5ZTY2NWYyYTMwMDQzYmUxYWJiZTciLCJpYXQiOjE3MDg3ODIwMDF9.hPgCZDP-BxhHC_HT8wRYH3I7adkD-0NSDrcU9P1UteQ`,
                 },
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
 
                 if (data.msg) {
-                    setUser(data.msg);
-                    
-                    
+                    localStorage.setItem("USER", JSON.stringify(data.msg));
+                    // console.log("1:",data.msg)
                 } else {
                     console.error("Unexpected API response format:", data);
                 }
@@ -45,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             console.error("Error during user authentication:", error);
         }
     };
-    
+
 
     useEffect(() => {
         userAuthentication();
@@ -53,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, storeTokenInLS, LogoutUser, user, token}}>
+        <AuthContext.Provider value={{ isLoggedIn, storeTokenInLS, LogoutUser, token }}>
             {children}
         </AuthContext.Provider>
     );

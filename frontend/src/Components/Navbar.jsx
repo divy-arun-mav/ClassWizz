@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useAuth } from '../store/auth';
+import { useAuth } from './store/auth';
 export default function Navbar() {
-    // const { isLoggedIn, user } = useAuth();
-    
+    // const {} = useAuth();
+    const [user,setUser] = useState(null);
     const navigate = useNavigate();
+    useEffect(() => {
+        const ans = localStorage.getItem("USER");
+        setUser(ans ? JSON.parse(ans) : null);
+    }, []);
+
     return (
         <>
             <nav className="navbar navbar-expand-lg" style={{ maxHeight: "50px" }}>
