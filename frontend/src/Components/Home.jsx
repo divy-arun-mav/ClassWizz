@@ -36,7 +36,7 @@ const Home = () => {
                 <button className='explore-more2'>Explore More</button>
                 <button className='experience-it3'>Experience It</button>
             </div>
-            <Footer />
+            {/* <Footer /> */}
             <style>
                 {`
                 body{

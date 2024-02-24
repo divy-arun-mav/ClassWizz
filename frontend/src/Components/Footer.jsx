@@ -9,14 +9,14 @@ const Footer = () => {
       <style>
         {`
         .footer-cont {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   background-color: black;
-   color: white;
-   text-align: center;
-}
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: black;
+          color: white;
+          text-align: center;
+        }
         `}
       </style>
     </>
