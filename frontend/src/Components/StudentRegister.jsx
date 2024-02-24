@@ -14,6 +14,7 @@ export default function StudentRegister() {
     const [mail, setMail] = useState('');
     const [student_id, setStudentId] = useState('');
     const [branch, setBranch] = useState('');
+    const [yos, setYos] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,6 +35,7 @@ export default function StudentRegister() {
                         mail,
                         student_id,
                         branch,
+                        yos,
                         type:person
                     }),
             });
@@ -88,8 +90,8 @@ export default function StudentRegister() {
                         </div>
                         <div className="form-group">
                             <label for="yos">Year Of Study:</label>
-                            <input type="yos" id="yos" name="yos" value={pass}
-                                onChange={(e) => setPass(e.target.value)} required />
+                            <input type="yos" id="yos" name="yos" value={yos}
+                                onChange={(e) => setYos(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <button type="submit">SignUp</button>

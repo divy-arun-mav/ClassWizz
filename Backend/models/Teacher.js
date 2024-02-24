@@ -26,7 +26,7 @@ const teacherSchema = new Schema({
     isTeacher: {
         type: Boolean,
         default: true
-    }
+    },
 });
 
 teacherSchema.methods.generateToken = async function () {

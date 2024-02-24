@@ -9,15 +9,16 @@ export default function Login() {
     const navigate = useNavigate();
     const [mail, setmail] = useState('');
     const [password, setPassword] = useState('');
-    const notifyA = (msg) => toast.error(msg);
-    const notifyB = (msg) => toast.success(msg);
+    // const notifyA = (msg) => toast.error(msg);
+    // const notifyB = (msg) => toast.success(msg);
 
     // username, password, type
 
     const handleSubmit = async (e) => {
         e.preventDefault();
          if (!password || !mail) {
-            return notifyA("All Fields are Required!!!")
+            //  return notifyA("All Fields are Required!!!")
+             return alert("All Fields are Required!!!")
         }
         try {
             const response = await fetch("http://localhost:8000/signin", {
@@ -36,11 +37,11 @@ export default function Login() {
                 // console.log("response from server ", res_data);
                 storeTokenInLS(res_data.token);
                 // console.log(isLoggedIn);
-                notifyB("Login Successfull");
+                alert("Login Successfull");
                 navigate('/');
             }
             else {
-                return notifyA("Invalid Credentials!!!")
+                return alert("Invalid Credentials!!!")
             }
         } catch (error) {
             console.log(error);
@@ -64,13 +65,6 @@ export default function Login() {
                             <input type="password" id="password" name="password" value={password}
                                 onChange={(e) => setPassword(e.target.value)} required />
                         </div>
-                        <div className="dropdown">
-                            <select name="user-type" id="user-drop-down">
-                                <option value="student">Student</option>
-                                <option value="teacher">Teacher</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
                         <div className="form-group">
                             <button type="submit">Login</button>
                         </div>
@@ -88,11 +82,6 @@ export default function Login() {
     overflow: hidden;
     width: 100%;
     max-width: 400px;
-}
-
-.dropdown{
-    margin-bottom: 20px;
-    font-size: 18px;
 }
 
 .form-header {

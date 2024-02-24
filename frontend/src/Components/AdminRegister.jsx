@@ -21,7 +21,7 @@ export default function AdminRegister() {
             return notifyA("All Fields Are Required!!!");
         }
         try {
-            const response = await fetch("http://localhost:8000/register", {
+            const response = await fetch("http://localhost:8000/signup", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export default function AdminRegister() {
                 notifyB("Registration Successfull !!!");
                 navigate("/login");
             } else {
-                return notifyA("Username Already Exist!!!");
+                return notifyA("An error occured");
             }
         }
         catch (error) {
