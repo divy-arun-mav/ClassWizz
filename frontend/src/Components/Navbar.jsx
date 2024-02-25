@@ -30,9 +30,7 @@ export default function Navbar({ user }) {
                                     <>
                                         {userData.isStudent && (
                                             <>
-                                                {/* <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/assignments-view'>Assignments</Link>
-                                                </li> */}
+                                               
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/attendance'>Attendance</Link>
                                                 </li>
@@ -69,7 +67,7 @@ export default function Navbar({ user }) {
                             <form className="d-flex fs-6 fw-medium ms-auto">
                                 {isLoggedIn ? (
                                     <>
-                                        {/* <h6 className='my-auto text-primary text-center me-2'>{userData.username}</h6> */}
+                                       
                                         <button className="btn btn-outline-danger ms-2 fw-semibold" type="button" style={{ maxHeight: "min-content" }} onClick={() => { LogoutUser(); navigate('/login') }}>Logout</button>
                                     </>
                                 ) : (

@@ -21,7 +21,7 @@ const userData = JSON.parse(localStorage.getItem("USER"));
 
             if (response.status === 200) {
                 const parsedData = await response.json();
-                setAttendanceData(parsedData); // Assuming the API response is an array of data
+                setAttendanceData(parsedData); 
             } else {
                 console.error('Failed to fetch attendance history:', response.status);
             }
@@ -43,7 +43,7 @@ const userData = JSON.parse(localStorage.getItem("USER"));
                     series={[
                         {
                             data: attendanceData.map(item => ({
-                                id: item.sub_name,  // Assuming sub_name is unique for each subject
+                                id: item.sub_name,  
                                 value: item.presentLec + item.absentLec,
                                 label: item.sub_name,
                             })),

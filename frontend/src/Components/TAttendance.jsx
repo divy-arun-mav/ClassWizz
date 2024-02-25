@@ -8,9 +8,6 @@ export default function TAttendance() {
         try {
             const response = await fetch("http://localhost:8000/fetchStudents", {
                 method: "GET",
-                // headers: {
-                //     Authorization: `Bearer ${token}`,
-                // },
             });
     
             if (response.ok) {
@@ -57,7 +54,7 @@ export default function TAttendance() {
                                 <td className='text-center'>
                                 <button class="btn btn-success me-2" type="button" id="button-addon2" >Present</button>
                                 <button class="btn btn-danger ms-2" type="button" id="button-addon2" >Absent</button>
-                                {/* onClick={() => allocate(ele._id)} */}
+                              
                                 </td>
                             </tr>
                         ))}

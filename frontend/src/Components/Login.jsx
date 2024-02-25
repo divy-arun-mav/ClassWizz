@@ -9,15 +9,10 @@ export default function Login() {
     const navigate = useNavigate();
     const [mail, setmail] = useState('');
     const [password, setPassword] = useState('');
-    // const notifyA = (msg) => toast.error(msg);
-    // const notifyB = (msg) => toast.success(msg);
-
-    // username, password, type
 
     const handleSubmit = async (e) => {
         e.preventDefault();
          if (!password || !mail) {
-            //  return notifyA("All Fields are Required!!!")
              return alert("All Fields are Required!!!")
         }
         try {
@@ -34,9 +29,8 @@ export default function Login() {
             })
             if (response.status === 200) {
                 const res_data = await response.json();
-                // console.log("response from server ", res_data);
                 storeTokenInLS(res_data.token);
-                // console.log(isLoggedIn);
+                
                 alert("Login Successfull");
                 navigate('/');
             }

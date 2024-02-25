@@ -6,8 +6,6 @@ import { toast } from 'react-toastify';
 
 export default function StudentRegister() {
     const {person,storeTokenInLS} = useAuth();
-    // const notifyA = (msg) => toast.error(msg);
-    // const notifyB = (msg) => toast.success(msg);
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
