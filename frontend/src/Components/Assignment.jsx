@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 
 export default function Assignment() {
+    const [mail,setmail] = useState('');
     const [branch,setBranch] = useState('');
     const [msg,setMsg] = useState('');
+    useEffect(()=>{
+    const userData = JSON.parse(localStorage.getItem("USER"));
+    setmail(userData.mail);
+    },[])
+    
     const sendMail = async (id) => {
         const ans = await fetch(`http://localhost:8000/contact`, {
             method: "POST",
@@ -12,7 +18,8 @@ export default function Assignment() {
             },
             body: JSON.stringify({
                 msg,
-                branch
+                branch,
+                mail
             })
         });
         if (ans.ok) {

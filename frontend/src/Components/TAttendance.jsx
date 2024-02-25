@@ -8,9 +8,6 @@ export default function TAttendance() {
         try {
             const response = await fetch("http://localhost:8000/fetchStudents", {
                 method: "GET",
-                // headers: {
-                //     Authorization: `Bearer ${token}`,
-                // },
             });
     
             if (response.ok) {
