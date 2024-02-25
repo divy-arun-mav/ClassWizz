@@ -108,19 +108,17 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendMsg = async (req, res) => {
-  // const { branch, msg, mail } = req.body;
-  const { branch, msg} = req.body;
-
+  const { branch, msg, mail } = req.body;
+  console.log(branch, msg, mail);
   if (!branch || !msg) {
     return res.status(422).json({ error: 'All Fields Are Required!' });
   }
   try {
-    const mailid = await Student.find({branch:branch}, 'mail'); 
+    const mailid = await Student.find({ branch: branch }, 'mail');
     const emailAddresses = mailid.map(student => student.mail);
 
     const info = await transporter.sendMail({
-      // from: mail,
-      from: "am7620613@gmail.com",
+      from: mail,
       to: emailAddresses.join(','),
       subject: "From DJSCE",
       text: "Hello world?",
@@ -147,7 +145,39 @@ exports.user = async (req, res) => {
 
 exports.students = async (req, res) => {
   try {
-    const data = await Student.find({}); 
+    const data = await Student.find({});
+    res.status(200).json({ msg: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+exports.updateClass = async (req, res) => {
+  const { id } = req.params;
+  const { facility, class: classroom_no, strength } = req.query;
+  try {
+    const updatedClassroom = await Classroom.findOneAndUpdate(
+      { _id: id },
+      { $set: { facility: facility, strength: strength, classroom_no: classroom_no } },
+      { useFindAndModify: false, new: true }
+    );
+
+    if (!updatedClassroom) {
+      return res.status(404).json({ error: "Classroom not found" });
+    }
+
+    return res.status(200).json({ Updated_Classroom: updatedClassroom });
+  } catch (err) {
+    return res.status(500).json({ error: `Internal Server Error -> ${err}` });
+  }
+};
+
+
+exports.pclass = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Classroom.findById(id);
     res.status(200).json({ msg: data })
   } catch (error) {
     console.log(error)
@@ -156,7 +186,7 @@ exports.students = async (req, res) => {
 
 exports.classrooms = async (req, res) => {
   try {
-    const data = await Classroom.find({}); 
+    const data = await Classroom.find({});
     res.status(200).json({ msg: data })
   } catch (error) {
     console.log(error)
@@ -245,7 +275,7 @@ exports.signup = async (req, res) => {
 
 exports.getclass = async (req, res) => {
   try {
-    const {strength} = req.query;
+    const { strength } = req.query;
 
     if (isNaN(strength)) {
       return res.status(400).json({ error: "Strength parameter must be a valid number" });
@@ -254,8 +284,8 @@ exports.getclass = async (req, res) => {
     const classrooms = await Classroom.find({
       isReserved: false,
       strength: { $gte: strength }
-  }).select('classroom_no strength facility isReserved');
-  
+    }).select('classroom_no strength facility isReserved');
+
 
     if (classrooms.length === 0) {
       console.log("No classes found with isReserved set to false");
@@ -273,17 +303,11 @@ exports.getclass = async (req, res) => {
 
 exports.updateclass = async (req, res) => {
   const { id } = req.query;
-
-  // if (!req.Teacher || !req.Teacher.username) {
-  //   return res.status(401).json({ message: 'Unauthorized' });
-  // }
-
-  // const { username: faculty_name } = req.Teacher;
+  const{username} = req.body;
   try {
     const classroom = await Classroom.findOneAndUpdate(
       { _id: id },
-      // { $set: { isReserved: true, faculty_name } },
-      { $set: { isReserved: true, faculty_name: "Noname Teacher" } },
+      { $set: { isReserved: true, faculty_name:username } },
       { useFindAndModify: false, new: true }
     );
 
@@ -341,7 +365,7 @@ exports.getAttendanceForStudent = async (req, res) => {
   console.log("USERID:", student_id);
   try {
     const student = await Student.findOne({ student_id });
-    console.log("STU:",student)
+    console.log("STU:", student)
     if (!student) {
       return res.status(404).json({ error: "Student not found" });
     }

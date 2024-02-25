@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 
 export default function Assignment() {
-    const [branch, setBranch] = useState('');
-    const [msg, setMsg] = useState('');
-    const [selectedBranch, setSelectedBranch] = useState('');
-
-    const sendMail = async () => {
-        // Use the selectedBranch state variable in your fetch request or any other logic
-        console.log('Selected Branch:', selectedBranch);
-
+    const [mail,setmail] = useState('');
+    const [branch,setBranch] = useState('');
+    const [msg,setMsg] = useState('');
+    useEffect(()=>{
+    const userData = JSON.parse(localStorage.getItem("USER"));
+    setmail(userData.mail);
+    },[])
+    
+    const sendMail = async (id) => {
         const ans = await fetch(`http://localhost:8000/contact`, {
             method: "POST",
             headers: {
@@ -18,7 +19,8 @@ export default function Assignment() {
             },
             body: JSON.stringify({
                 msg,
-                branch: selectedBranch,
+                branch,
+                mail
             })
         });
 

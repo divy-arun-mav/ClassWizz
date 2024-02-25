@@ -14,6 +14,8 @@ router.get('/user1', authMiddleware(Teacher), service.user);
 router.get('/user2', authMiddleware(Student), service.user);
 router.get('/user3', authMiddleware(Admin), service.user);
 router.post('/contact',service.sendMsg);
+router.get('/pclass/:id',service.pclass);
+router.put('/uclass/:id',service.updateClass);
 router.get('/fetchStudents',service.students);
 router.get('/fetchClass',service.classrooms);
 router.put('/putattendance', service.putAttendance);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
+import Navbar from './Navbar';
 
 export default function ClassRoom() {
     const [data, setData] = useState('');
@@ -65,6 +66,8 @@ export default function ClassRoom() {
 
 
     return (
+        <>
+        <Navbar/>
         <div className="container mt-5">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Class Strength" aria-label="Recipient's username" aria-describedby="button-addon2" value={strength} onChange={(e) => { setStrength(e.target.value) }} />
@@ -104,7 +107,11 @@ export default function ClassRoom() {
                 color: black;
                 font-weight:bolder;
             }
+            body{
+                margin-top:100px
+            }
             `}</style>
         </div>
+        </>
     )
 }
