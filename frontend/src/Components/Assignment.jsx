@@ -36,7 +36,6 @@ export default function Assignment() {
             <Navbar />
             <div className="container col-6 mt-5">
                 <div className="input-group mb-3">
-                    <label htmlFor='btn-group'>Select Your Branch</label>
                     <div className="btn-group" id="btn-group">
                         <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {selectedBranch ? selectedBranch : 'Select Branch'}
