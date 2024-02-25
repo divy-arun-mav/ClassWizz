@@ -31,7 +31,7 @@ export default function Login() {
                 const res_data = await response.json();
                 storeTokenInLS(res_data.token);
                 
-                alert("Login Successfull");
+                window.alert("Login Successfull");
                 navigate('/');
             }
             else {

@@ -8,29 +8,27 @@ export const options = {
 };
 
 export default function Attendance() {
-
-
-
     const { token } = useAuth();
     const [attendanceData, setAttendanceData] = useState([]);
+    const [subjectWiseAttendance, setSubjectWiseAttendance] = useState({});
+    const [totalAttendancePercentage, setTotalAttendancePercentage] = useState("");
     const userData = JSON.parse(localStorage.getItem("USER"));
 
     const getAttendance = async () => {
         try {
-            const response = await fetch('http://localhost:8000/getattendance', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:8000/getattendance`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({
-                    student_id: 123,  // Replace with the actual student_id
-                }),
             });
 
             if (response.status === 200) {
                 const parsedData = await response.json();
-                setAttendanceData(parsedData); 
+                console.log(parsedData);
+                setAttendanceData(parsedData.attendanceData);
+                setSubjectWiseAttendance(parsedData.subjectWiseAttendance);
+                setTotalAttendancePercentage(parsedData.totalAttendancePercentage);
             } else {
                 console.error('Failed to fetch attendance history:', response.status);
             }
@@ -50,17 +48,31 @@ export default function Attendance() {
                 <h1>Student Attendance Portal</h1>
                 {attendanceData.length > 0 ? (
                     <div>
+                        <h2>Subject-wise Attendance</h2>
                         <Chart
                             chartType="PieChart"
                             data={[
                                 ['Subject', 'Attendance'],
-                                ...attendanceData.map(item => [item.sub_name, item.presentLec + item.absentLec]),
+                                ...attendanceData.map(item => [item.sub_name, item.presentLec]),
                             ]}
                             options={options}
                             width={"100%"}
                             height={"400px"}
                         />
-                        <p>Data available, chart should be visible</p>
+                        <h2>Total Attendance Percentage</h2>
+                        <Chart
+                            chartType="PieChart"
+                            data={[
+                                ['Attendance', 'Percentage'],
+                                ['Present', parseFloat(totalAttendancePercentage)],
+                                ['Absent', 100 - parseFloat(totalAttendancePercentage)],
+                            ]}
+                            options={options}
+                            width={"100%"}
+                            height={"400px"}
+                        />
+
+                        <p>Data available, charts should be visible</p>
                     </div>
                 ) : (
                     <p>No attendance data available</p>

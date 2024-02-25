@@ -36,6 +36,12 @@ const Home = () => {
                 <button className='explore-more2'>Explore More</button>
                 <button className='experience-it3'>Experience It</button>
             </div>
+            {/* <iframe
+                src="https://www.chatbase.co/chatbot-iframe/GfYzYWt2RVJHxYp9msNSN"
+                width="100%"
+                style={{height: "100%", minHeight: "700px"}}
+                frameborder="0"
+            ></iframe> */}
             {/* <Footer /> */}
             <style>
                 {`

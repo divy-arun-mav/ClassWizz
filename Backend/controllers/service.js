@@ -360,11 +360,11 @@ exports.putAttendance = async (req, res) => {
 };
 
 exports.getAttendanceForStudent = async (req, res) => {
-  const { student_id } = req.body;
-  console.log("Request Body:", req.body);
-  console.log("USERID:", student_id);
+  const id = "123";
+  console.log("Request Body:", req.query);
+  console.log("USERID:", id);
   try {
-    const student = await Student.findOne({ student_id });
+    const student = await Student.findOne({ student_id: id });
     console.log("STU:", student)
     if (!student) {
       return res.status(404).json({ error: "Student not found" });
@@ -388,6 +388,22 @@ exports.getAttendanceForStudent = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// exports.getAttendanceForStudent = async (req, res) => {
+//   const id= 123;
+//   try {
+    
+
+//     res.status(200).json({
+//       attendanceData,
+//       totalAttendancePercentage,
+//       subjectWiseAttendance,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 // Function to calculate total attendance percentage
 const calculateTotalAttendancePercentage = (attendanceData) => {
