@@ -13,7 +13,7 @@ export default function Navbar({ user }) {
     return (
         <>
             <div className="nav-cont">
-                <nav style={{ maxHeight: "100%", maxWidth: "100%", backgroundColor: "rgba(255,255,255,0.3)" }} className="navbar navbar-expand-lg">
+                <nav style={{ maxWidth: "100%", backgroundColor: "rgba(255,255,255,0.3)" }} className="navbar navbar-expand-lg">
                     <div className="container-fluid">
                         <Link className="navbar-brand fs-4 fw-bolder" style={{ color: "purple" }} to='/'>
                             <img src={logo} alt="logo" className='logo' id="logo" />
@@ -30,9 +30,9 @@ export default function Navbar({ user }) {
                                     <>
                                         {userData.isStudent && (
                                             <>
-                                                <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/assignments'>Assignments</Link>
-                                                </li>
+                                                {/* <li className="nav-item">
+                                                    <Link className="nav-link active" aria-current="page" to='/assignments-view'>Assignments</Link>
+                                                </li> */}
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/attendance'>Attendance</Link>
                                                 </li>
@@ -46,16 +46,13 @@ export default function Navbar({ user }) {
                                         {userData.isTeacher && (
                                             <>
                                                 <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/schedule'>Schedule</Link>
-                                                </li>
-                                                <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/add_assignment'>Add Assignment</Link>
+                                                    <Link className="nav-link active" aria-current="page" to='/assignments'>BroadCast</Link>
                                                 </li>
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/dashboard'>Dashboard</Link>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/attendance'>Attendance</Link>
+                                                    <Link className="nav-link active" aria-current="page" to='/tattendance'>Attendance</Link>
                                                 </li>
                                             </>
                                         )}

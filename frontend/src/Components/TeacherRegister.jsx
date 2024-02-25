@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 
 export default function TeacherRegister() {
     const navigate = useNavigate();
-    const {person,storeTokenInLS} = useAuth();
+    const { person, storeTokenInLS } = useAuth();
     const notifyA = (msg) => toast.error(msg);
     const notifyB = (msg) => toast.success(msg);
     const [username, setUsername] = useState('');
@@ -34,7 +34,7 @@ export default function TeacherRegister() {
                     mail,
                     subject,
                     teacher_id,
-                    person
+                    type:person
                 }),
             });
 
@@ -42,28 +42,29 @@ export default function TeacherRegister() {
                 const res_data = await response.json();
                 console.log("response from server ", res_data);
                 storeTokenInLS(res_data.token);
-                notifyB("Registration Successfull !!!");
+                alert("Registration Successfull !!!");
                 navigate("/login");
             } else {
-                return notifyA("Username Already Exist!!!");
+                return alert("Username Already Exist!!!");
             }
         }
         catch (error) {
-            notifyA(error);
+            alert(error);
         }
     };
 
 
     return (
         <>
-            <Navbar/>
+            <Navbar />
             <div className="container ">
 
                 <div className="form-body">
                     <form id="registerForm" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required />
+                            <input type="text" id="name" name="name" value={username}
+                                onChange={(e) => setUsername(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <label for="password">Password:</label>
@@ -80,7 +81,7 @@ export default function TeacherRegister() {
                             <input type="student-id" id="student-id" name="student-id" value={teacher_id}
                                 onChange={(e) => setTeacherId(e.target.value)} required />
                         </div>
-                        
+
                         <div className="form-group">
                             <label for="yos">Subject:</label>
                             <input type="yos" id="yos" name="yos" value={subject}
@@ -94,9 +95,10 @@ export default function TeacherRegister() {
             </div >
             <style>{`
 
-
+body{
+    margin-top:100px
+}
 .container {
-    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;

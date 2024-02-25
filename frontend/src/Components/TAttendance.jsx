@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react'
+import Navbar from './Navbar';
 
 export default function TAttendance() {
     const [stu,setStu] = useState("");
@@ -35,6 +36,7 @@ export default function TAttendance() {
 
   return (
    <>
+   <Navbar/>
    <div className='container'>
     <h4 className='text-center m-3'>Attendance</h4>
     <h4 className='text-center m-2'>SUBJECT</h4>
@@ -65,6 +67,11 @@ export default function TAttendance() {
 
                 </table>
             </div>
+            <style>{`
+            body{
+                margin-top:100px
+            }
+            `}</style>
    </div>
    </>
   )

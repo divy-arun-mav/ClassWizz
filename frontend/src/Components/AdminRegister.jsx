@@ -18,7 +18,7 @@ export default function AdminRegister() {
         e.preventDefault();
 
         if (!username || !password || !mail) {
-            return notifyA("All Fields Are Required!!!");
+            return alert("All Fields Are Required!!!");
         }
         try {
             const response = await fetch("http://localhost:8000/signup", {
@@ -38,14 +38,14 @@ export default function AdminRegister() {
                 const res_data = await response.json();
                 console.log("response from server ", res_data);
                 storeTokenInLS(res_data.token);
-                notifyB("Registration Successfull !!!");
+                alert("Registration Successfull !!!");
                 navigate("/login");
             } else {
-                return notifyA("An error occured");
+                return alert("An error occured");
             }
         }
         catch (error) {
-            notifyA(error);
+            alert(error);
         }
     };
 
@@ -57,19 +57,19 @@ export default function AdminRegister() {
                 <div className="form-body">
                     <form id="registerForm" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label for="username">Username:</label>
-                            <input type="username" id="username" name="username" value={username}
-                                onChange={(e) => setUsername(e.target.value)} required />
+                        <label htmlFor="username">Username:</label>
+            <input type="username" id="username" name="username" value={username}
+                onChange={(e) => setUsername(e.target.value)} required />
                         </div>
                         <div className="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value={mail}
-                                onChange={(e) => setMail(e.target.value)} required />
+                        <label htmlFor="email">Email:</label>
+            <input type="email" id="email" name="email" value={mail}
+                onChange={(e) => setMail(e.target.value)} required />
                         </div>
                         <div className="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" value={password}
-                                onChange={(e) => setPassword(e.target.value)} required />
+                        <label htmlFor="password">Password:</label>
+            <input type="password" id="password" name="password" value={password}
+                onChange={(e) => setPassword(e.target.value)} required />
                         </div>
                         <div className="form-group">
                             <button type="submit">SignUp</button>
@@ -79,14 +79,21 @@ export default function AdminRegister() {
             </div >
             <style>{`
 
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
 .container {
-    background-color: #fff;
+    background-color:white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 100%;
     max-width: 400px;
+    min-width:400px;
 }
 
 .checkbox-area{
@@ -95,11 +102,12 @@ export default function AdminRegister() {
     align-items:center;
     text-align:center;
     width:max-content;
+    background-color:white;
 }
 
 
 .form-header {
-    background-color: #4CAF50;
+    background-color: white;
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -107,6 +115,7 @@ export default function AdminRegister() {
 
 .form-body {
     padding: 20px;
+    background-color:white
 }
 
 .form-group {

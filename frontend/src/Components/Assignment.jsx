@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Navbar from './Navbar';
 
 export default function Assignment() {
     const [branch,setBranch] = useState('');
@@ -23,6 +24,8 @@ export default function Assignment() {
         }
     }
     return (
+       <>
+        <Navbar/>
         <div className="container col-6 mt-5">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Enter Branch" aria-label="Recipient's username" aria-describedby="basic-addon2" value={branch} onChange={(e)=>{setBranch(e.target.value)}}/>
@@ -34,5 +37,13 @@ export default function Assignment() {
             <button className='btn btn-success' onClick={sendMail}>Send Mail</button>
             </div>
         </div>
+        <style>
+            {`
+            body{
+                margin-top:100px;            
+            }
+            `}
+        </style>
+       </>
     )
 }

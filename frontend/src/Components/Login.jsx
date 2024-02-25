@@ -75,7 +75,7 @@ export default function Login() {
 
 
 .container {
-    background-color: #89CFF0;
+    // background-color: #89CFF0;
     border-radius: 8px;
     margin-top: 12%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

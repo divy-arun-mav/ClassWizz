@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 export default function StudentRegister() {
     const {person,storeTokenInLS} = useAuth();
-    const notifyA = (msg) => toast.error(msg);
-    const notifyB = (msg) => toast.success(msg);
+    // const notifyA = (msg) => toast.error(msg);
+    // const notifyB = (msg) => toast.success(msg);
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -20,7 +20,7 @@ export default function StudentRegister() {
         e.preventDefault();
         console.log(username,password,mail);
         if (!username || !password || !mail) {
-            return notifyA("All Fields Are Required!!!");
+            return alert("All Fields Are Required!!!");
         }
 
         try {
@@ -44,14 +44,14 @@ export default function StudentRegister() {
                 const res_data = await response.json();
                 console.log("response from server ", res_data);
                 storeTokenInLS(res_data.token);
-                notifyB("Registration Successfull !!!");
+                alert("Registration Successfull !!!");
                 navigate("/login");
             } else {
-                return notifyA("Username Already Exist!!!");
+                return alert("Username Already Exist!!!");
             }
         }
         catch (error) {
-            notifyA(error);
+            console.log(error);
         }
     };
 
@@ -103,7 +103,6 @@ export default function StudentRegister() {
 
 
 .container {
-    background-color: #89CFF0;
     margin-top:8%;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

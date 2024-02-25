@@ -154,6 +154,15 @@ exports.students = async (req, res) => {
   }
 }
 
+exports.classrooms = async (req, res) => {
+  try {
+    const data = await Classroom.find({}); 
+    res.status(200).json({ msg: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 exports.signup = async (req, res) => {
   const { username, mail, subject, teacher_id, student_id, type, password, branch, yos } = req.body;
 
