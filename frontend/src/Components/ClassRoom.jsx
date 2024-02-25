@@ -36,10 +36,7 @@ export default function ClassRoom() {
     const handleSubmit = async () => {
         const ans = await fetch(`http://localhost:8000/getclassroom/?strength=${strength}`, {
             method: "GET",
-            // headers: {
-            //     "Content-Type": "application/json",
-            //     'Authorization': `Bearer ${token}`,
-            //   }
+           
         });
         if (ans.ok) {
             const dataa = await ans.json();
@@ -57,7 +54,7 @@ export default function ClassRoom() {
         if (ans.ok) {
             const updatedData = data.filter((ele) => ele._id !== id);
             setData(updatedData);
-            // notifyB("Class Allocated Successfully");
+          
             alert("Class Allocated Successfully");
             sendMail("There have been some changes in your branch", userData.branch);
             setStrength("");

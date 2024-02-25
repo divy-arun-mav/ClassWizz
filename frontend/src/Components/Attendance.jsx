@@ -30,8 +30,7 @@ export default function Attendance() {
 
             if (response.status === 200) {
                 const parsedData = await response.json();
-                console.log('Fetched attendance data:', parsedData);
-                setAttendanceData(parsedData);
+                setAttendanceData(parsedData); 
             } else {
                 console.error('Failed to fetch attendance history:', response.status);
             }
