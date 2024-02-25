@@ -11,6 +11,8 @@ import Home from './Components/Home';
 import ClassRoom from './Components/ClassRoom';
 import Attendance from './Components/Attendance';
 import { useAuth } from './Components/store/auth';
+import TAttendance from './Components/TAttendance';
+import Assignment from './Components/Assignment';
 
 function App() {
   const { person } = useAuth();
@@ -29,6 +31,8 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/attendance' element={<Attendance />} />
+        <Route exact path='/tattendance' element={<TAttendance />} />
+        <Route exact path='/assignment' element={<Assignment />} />
 
         <Route exact path='/classroom' element={<ClassRoom />} />
         {person === 'Student' && <Route exact path='/studentregister' element={<StudentRegister />} />}

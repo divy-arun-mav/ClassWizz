@@ -6,8 +6,7 @@ import Navbar from './Navbar';
 export default function Attendance() {
     const { token, USER } = useAuth();
     const [attendanceData, setAttendanceData] = useState([]);
-
-    const userData = JSON.parse(localStorage.getItem("USER"));
+const userData = JSON.parse(localStorage.getItem("USER"));
     const uri = `http://localhost:8000/getattendance?student_id=${userData._id}`;
 
     const getAttendance = async () => {
