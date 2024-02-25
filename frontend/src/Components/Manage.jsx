@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
+import { useAuth } from './store/auth';
 
 export default function Manage() {
     const [klass, setKlass] = useState("");
+    const { backend_api } = useAuth();
     const userAuthentication = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/fetchClass`, {
+            const response = await fetch(`${backend_api}/fetchClass`, {
                 method: "GET",
             });
 

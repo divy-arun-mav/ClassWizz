@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from './store/auth';
 
 export default function Edit() {
     const [classroom_no, setclassroom_no] = useState("");
     const [facility, setfacility] = useState("");
     const [strength, setstrength] = useState("");
     const navigate = useNavigate();
+    const { backend_api } = useAuth();
 
     const { id } = useParams();
     const handleSubmit = async () => {
-        const ans = await fetch(`http://localhost:8000/pclass/${id}`, {
+        const ans = await fetch(`${backend_api}/pclass/${id}`, {
             method: "GET",
         });
         if (ans.ok) {
@@ -26,7 +28,7 @@ export default function Edit() {
 
 
     const putRequest = async (id) => {
-        const ans = await fetch(`http://localhost:8000/uclass/${id}?class=${classroom_no}&facility=${facility}&strength=${strength}`, {
+        const ans = await fetch(`${backend_api}/uclass/${id}?class=${classroom_no}&facility=${facility}&strength=${strength}`, {
             method: "PUT",
         });
         if (ans.ok) {

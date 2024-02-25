@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import Navbar from './Navbar';
+import { useAuth } from './store/auth';
 
 export default function ClassRoom() {
     const [data, setData] = useState('');
@@ -9,12 +10,13 @@ export default function ClassRoom() {
     const [branch, setBranch] = useState('');
     const [msg, setMsg] = useState('');
     const [selectedBranch, setSelectedBranch] = useState('');
+    const { backend_api } = useAuth();
 
     const sendMail = async (msg, selectedBranch) => {
         // Use the selectedBranch state variable in your fetch request or any other logic
         console.log('Selected Branch:', selectedBranch);
 
-        const ans = await fetch(`http://localhost:8000/contact`, {
+        const ans = await fetch(`${backend_api}/contact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -35,7 +37,7 @@ export default function ClassRoom() {
     }
 
     const handleSubmit = async () => {
-        const ans = await fetch(`http://localhost:8000/getclassroom/?strength=${strength}`, {
+        const ans = await fetch(`${backend_api}/getclassroom/?strength=${strength}`, {
             method: "GET",
            
         });
@@ -49,7 +51,7 @@ export default function ClassRoom() {
     }
 
     const allocate = async (id) => {
-        const ans = await fetch(`http://localhost:8000/updateclass/?id=${id}`, {
+        const ans = await fetch(`${backend_api}/updateclass/?id=${id}`, {
             method: "PUT",
         });
         if (ans.ok) {

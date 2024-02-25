@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
+import { useAuth } from './store/auth';
 
 export default function TAttendance() {
     const [students, setStudents] = useState([]);
     const [attended, setAttended] = useState(false);
     const [type, setType] = useState('present'); // Default to 'present'
     const userData = JSON.parse(localStorage.getItem("USER"));
+    const { backend_api } = useAuth();
 
     const userAuthentication = async () => {
         try {
-            const response = await fetch("http://localhost:8000/fetchStudents", {
+            const response = await fetch(`${backend_api}/fetchStudents`, {
                 method: "GET",
             });
 
@@ -33,7 +35,7 @@ export default function TAttendance() {
 
     const updateAttendance = async (studentId, attendanceType) => {
         try {
-            const response = await fetch("http://localhost:8000/putattendance", {
+            const response = await fetch(`${backend_api}/putattendance`, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 export default function AdminRegister() {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const passRege = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-    const {person,storeTokenInLS} = useAuth();
+    const {person,storeTokenInLS,backend_api} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -30,7 +30,7 @@ export default function AdminRegister() {
             return alert("All Fields Are Required!!!");
         }
         try {
-            const response = await fetch("http://localhost:8000/signup", {
+            const response = await fetch(`${backend_api}/signup`, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

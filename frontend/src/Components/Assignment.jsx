@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
+import { useAuth } from './store/auth';
 
 export default function Assignment() {
     const [branch, setBranch] = useState('');
     const [msg, setMsg] = useState('');
     const [selectedBranch, setSelectedBranch] = useState('');
+    const { backend_api } = useAuth();
 
     const sendMail = async () => {
         // Use the selectedBranch state variable in your fetch request or any other logic
         console.log('Selected Branch:', selectedBranch);
 
-        const ans = await fetch('http://localhost:8000/contact', {
+        const ans = await fetch(`${backend_api}/contact`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

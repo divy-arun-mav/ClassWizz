@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function Login() {
-    const {person,storeTokenInLS} = useAuth();
+    const {person,storeTokenInLS,backend_api} = useAuth();
     const navigate = useNavigate();
     const [mail, setmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ export default function Login() {
              return alert("All Fields are Required!!!")
         }
         try {
-            const response = await fetch("http://localhost:8000/signin", {
+            const response = await fetch(`${backend_api}/signin`, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

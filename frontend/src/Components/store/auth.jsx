@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { backend_api } from "./url";
 
 export const AuthContext = createContext();
 
@@ -23,21 +24,21 @@ export const AuthProvider = ({ children }) => {
         let response;
         try {
             if (person === "Student") {
-                response = await fetch("http://localhost:8000/user2", {
+                response = await fetch(`${backend_api}/user2`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
             } else if (person === "Teacher") {
-                response = await fetch("http://localhost:8000/user1", {
+                response = await fetch(`${backend_api}/user1`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
             } else if (person === "Admin") {
-                response = await fetch("http://localhost:8000/user3", {
+                response = await fetch(`${backend_api}/user3`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -69,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     }, [token, person]);
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, storeTokenInLS, LogoutUser, token, setPerson, person }}>
+        <AuthContext.Provider value={{ isLoggedIn, storeTokenInLS, LogoutUser, token, setPerson, person , backend_api }}>
             {children}
         </AuthContext.Provider>
     );

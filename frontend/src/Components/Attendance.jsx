@@ -8,7 +8,7 @@ export const options = {
 };
 
 export default function Attendance() {
-    const { token } = useAuth();
+    const { token, backend_api } = useAuth();
     const [attendanceData, setAttendanceData] = useState([]);
     const [subjectWiseAttendance, setSubjectWiseAttendance] = useState({});
     const [totalAttendancePercentage, setTotalAttendancePercentage] = useState("");
@@ -16,7 +16,7 @@ export default function Attendance() {
 
     const getAttendance = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/getattendance`, {
+            const response = await fetch(`${backend_api}/getattendance`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
