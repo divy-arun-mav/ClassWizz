@@ -196,20 +196,46 @@ exports.classrooms = async (req, res) => {
 exports.signup = async (req, res) => {
   const { username, mail, subject, teacher_id, student_id, type, password, branch, yos } = req.body;
 
-  if (!username || !password) {
-    console.log('Please add all the required fields');
-    return res.status(422).json({ error: "Please add all the required fields" });
+
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const passRege = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+
+  if (!mail || !password || !type) {
+    return res.status(422).json({ error: "Please provide a valid username and password" });
   }
+
+  if (!emailRegex.test(mail)) {
+    alert("Invalid Email");
+    return;
+  }
+  else if (!passRege.test(password)) {
+    alert("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
+    return;
+  }
+
+
 
   try {
     let userType;
 
     if (type === 'Student') {
       userType = 'Student';
+      if (!username || !password || !student_id || !mail || !branch || !yos) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else if (type === 'Admin') {
       userType = 'Admin';
+      if (!username || !password || !mail) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else if (type === 'Teacher') {
       userType = 'Teacher';
+      if (!username || !password || !teacher_id || !mail || !subject) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else {
       console.log('Invalid user type');
       return res.status(422).json({ error: 'Invalid user type' });
@@ -246,9 +272,6 @@ exports.signup = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
 
 exports.getclass = async (req, res) => {
   try {
@@ -300,6 +323,8 @@ exports.updateclass = async (req, res) => {
   }
 };
 
+// Assuming you have the necessary imports and configurations
+
 exports.putAttendance = async (req, res) => {
   const { student_id, sub_name, presentLec, totalLec } = req.body;
 
@@ -327,7 +352,7 @@ exports.putAttendance = async (req, res) => {
 
     await student.save();
 
-    res.status(200).json({ message: "Attendance updated successfully" });
+    res.status(200).json({ message: "Attendance updated successfully", });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -336,6 +361,7 @@ exports.putAttendance = async (req, res) => {
 
 exports.getAttendanceForStudent = async (req, res) => {
   const { student_id } = req.body;
+  console.log("Request Body:", req.body);
   console.log("USERID:", student_id);
   try {
     const student = await Student.findOne({ student_id });
@@ -394,3 +420,25 @@ const calculateSubjectWiseAttendance = (attendanceData) => {
 
   return subjectWiseAttendance;
 };
+
+exports.revokeClass = async (req, res) => {
+  const { classId } = req.body;
+  if (!classId) {
+    res.status(500).json({ error: "Please enter a valid ID" })
+  }
+  try {
+    const className = await Classroom.findOneAndUpdate(
+      { _id: classId },
+      { isReserved: false },
+      { useFindAndModify: false, new: true }
+    )
+    if (!className) {
+      return res.status(404).json({ message: 'No reserved classrooms found.' });
+    }
+
+    res.status(200).json({ message: 'Classroom updated successfully', className });
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e })
+  }
+}

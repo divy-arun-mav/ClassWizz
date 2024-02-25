@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 
 export default function AdminRegister() {
-    const notifyA = (msg) => toast.error(msg);
-    const notifyB = (msg) => toast.success(msg);
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const passRege = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
     const {person,storeTokenInLS} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -16,6 +16,15 @@ export default function AdminRegister() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!emailRegex.test(mail)) {
+            alert("Invalid Email");
+            return;
+        }
+        else if (!passRege.test(password)) {
+            alert("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
+            return;
+        }
 
         if (!username || !password || !mail) {
             return alert("All Fields Are Required!!!");

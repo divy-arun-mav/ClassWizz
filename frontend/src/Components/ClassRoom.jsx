@@ -5,16 +5,39 @@ import Navbar from './Navbar';
 export default function ClassRoom() {
     const [data, setData] = useState('');
     const [strength, setStrength] = useState('');
-    const notifyA = (msg) => toast.error(msg);
-    const notifyB = (msg) => toast.success(msg);
+    const userData = JSON.parse(localStorage.getItem("USER"));
+    const [branch, setBranch] = useState('');
+    const [msg, setMsg] = useState('');
+    const [selectedBranch, setSelectedBranch] = useState('');
+
+    const sendMail = async (msg, selectedBranch) => {
+        // Use the selectedBranch state variable in your fetch request or any other logic
+        console.log('Selected Branch:', selectedBranch);
+
+        const ans = await fetch(`http://localhost:8000/contact`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                msg,
+                branch: selectedBranch,
+            })
+        });
+
+        if (ans.ok) {
+            alert("Message Sent Successfully");
+            setBranch('');
+            setMsg('');
+        } else {
+            console.error('Error:', ans.statusText);
+        }
+    }
 
     const handleSubmit = async () => {
         const ans = await fetch(`http://localhost:8000/getclassroom/?strength=${strength}`, {
             method: "GET",
-            // headers: {
-            //     "Content-Type": "application/json",
-            //     'Authorization': `Bearer ${token}`,
-            //   }
+           
         });
         if (ans.ok) {
             const dataa = await ans.json();
@@ -32,8 +55,9 @@ export default function ClassRoom() {
         if (ans.ok) {
             const updatedData = data.filter((ele) => ele._id !== id);
             setData(updatedData);
-            // notifyB("Class Allocated Successfully");
+          
             alert("Class Allocated Successfully");
+            sendMail("There have been some changes in your branch", userData.branch);
             setStrength("");
         } else {
             console.error('Error:', ans.statusText);
