@@ -105,6 +105,7 @@ export default function Navbar({ user }) {
         }
         .logo{
             width:200px;
+            margin-left:10px;
         }
         li {
           margin-inline: 10px;

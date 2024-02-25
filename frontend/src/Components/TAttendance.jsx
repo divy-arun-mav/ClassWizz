@@ -1,8 +1,11 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 
 export default function TAttendance() {
-    const [stu,setStu] = useState("");
+    const [students, setStudents] = useState([]);
+    const [attended, setAttended] = useState(false);
+    const [type, setType] = useState('present'); // Default to 'present'
+    const userData = JSON.parse(localStorage.getItem("USER"));
 
     const userAuthentication = async () => {
         try {
@@ -12,12 +15,14 @@ export default function TAttendance() {
                 //     Authorization: `Bearer ${token}`,
                 // },
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
+                console.log(data.msg);
 
                 if (data.msg) {
-                    setStu(data.msg);   
+                    setStudents(data.msg);
+                    setAttended(true);
                 } else {
                     console.error("Unexpected API response format:", data);
                 }
@@ -29,50 +34,74 @@ export default function TAttendance() {
         }
     };
 
-    useEffect(()=>{
-        userAuthentication();
-    },[])
+    const updateAttendance = async (studentId, attendanceType) => {
+        try {
+            const response = await fetch("http://localhost:8000/putattendance", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    student_id: studentId,
+                    sub_name: userData.subject,
+                    presentLec: attendanceType === 'present' ? 1 : 0,
+                    totalLec: 1,
+                }),
+            });
 
-
-  return (
-   <>
-   <Navbar/>
-   <div className='container'>
-    <h4 className='text-center m-3'>Attendance</h4>
-    <h4 className='text-center m-2'>SUBJECT</h4>
-   <div className="table-responsive mt-5">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" className="text-center">Name</th>
-                            <th scope="col" className="text-center">SAP ID</th>
-                            <th scope="col" className="text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Array.isArray(stu) && stu.map((ele) => (
-                            <tr key={ele._id}>
-                                <td className="text-center">{ele.username}</td>
-                                <td className="text-center">{ele.student_id}</td>
-                                <td className='text-center'>
-                                <button class="btn btn-success me-2" type="button" id="button-addon2" >Present</button>
-                                <button class="btn btn-danger ms-2" type="button" id="button-addon2" >Absent</button>
-                                {/* onClick={() => allocate(ele._id)} */}
-                                </td>
-                            </tr>
-                        ))}
-
-                    </tbody>
-
-
-                </table>
-            </div>
-            <style>{`
-            body{
-                margin-top:100px
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message);
+                setType(attendanceType);  // Set type based on the attendanceType
+                setAttended(true);  // Set attended to true
+            } else {
+                console.error("Server returned an error:", response.status, response.statusText);
             }
-            `}</style>
-   </div>
-   </>
-  )
+        } catch (error) {
+            console.error("Error during updating attendance:", error);
+        }
+    };
+
+    useEffect(() => {
+        userAuthentication();
+    }, []);
+
+    return (
+        <>
+            <Navbar />
+            <div className='container'>
+                <h4 className='text-center m-3'>Attendance</h4>
+                <h4 className='text-center m-2'>{userData.subject}</h4>
+                <div className="table-responsive mt-5">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" className="text-center">Name</th>
+                                <th scope="col" className="text-center">SAP ID</th>
+                                <th scope="col" className="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.isArray(students) && students.map((student) => (
+                                <tr key={student._id}>
+                                    <td className="text-center">{student.username}</td>
+                                    <td className="text-center">{student.student_id}</td>
+                                    {attended === true ? (<td className='text-center'>
+                                        <button className="btn btn-success me-2" type="button" onClick={() => updateAttendance(student.student_id, 'present')}>Present</button>
+                                        <button className="btn btn-danger ms-2" type="button" onClick={() => updateAttendance(student.student_id, 'absent')}>Absent</button>
+                                    </td>) : <p>{type}</p>}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <style>{`
+                    body {
+                        margin-top: 100px;
+                    }
+                `}</style>
+            </div>
+        </>
+    );
 }

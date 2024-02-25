@@ -7,8 +7,10 @@ import Navbar from './Navbar';
 export default function TeacherRegister() {
     const navigate = useNavigate();
     const { person, storeTokenInLS } = useAuth();
-    const notifyA = (msg) => toast.error(msg);
-    const notifyB = (msg) => toast.success(msg);
+    
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const passRege = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [mail, setMail] = useState('');
@@ -19,7 +21,16 @@ export default function TeacherRegister() {
         e.preventDefault();
 
         if (!username || !password || !mail) {
-            return notifyA("All Fields Are Required!!!");
+            return alert("All Fields Are Required!!!");
+        }
+
+        if (!emailRegex.test(mail)) {
+            alert("Invalid Email");
+            return;
+        }
+        else if (!passRege.test(password)) {
+            alert("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
+            return;
         }
 
         try {
