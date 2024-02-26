@@ -108,19 +108,17 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendMsg = async (req, res) => {
-  // const { branch, msg, mail } = req.body;
-  const { branch, msg} = req.body;
-
+  const { branch, msg, mail } = req.body;
+  console.log(branch, msg, mail);
   if (!branch || !msg) {
     return res.status(422).json({ error: 'All Fields Are Required!' });
   }
   try {
-    const mailid = await Student.find({branch:branch}, 'mail'); 
+    const mailid = await Student.find({ branch: branch }, 'mail');
     const emailAddresses = mailid.map(student => student.mail);
 
     const info = await transporter.sendMail({
-      // from: mail,
-      from: "am7620613@gmail.com",
+      from: mail,
       to: emailAddresses.join(','),
       subject: "From DJSCE",
       text: "Hello world?",
@@ -147,7 +145,39 @@ exports.user = async (req, res) => {
 
 exports.students = async (req, res) => {
   try {
-    const data = await Student.find({}); 
+    const data = await Student.find({});
+    res.status(200).json({ msg: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+exports.updateClass = async (req, res) => {
+  const { id } = req.params;
+  const { facility, class: classroom_no, strength } = req.query;
+  try {
+    const updatedClassroom = await Classroom.findOneAndUpdate(
+      { _id: id },
+      { $set: { facility: facility, strength: strength, classroom_no: classroom_no } },
+      { useFindAndModify: false, new: true }
+    );
+
+    if (!updatedClassroom) {
+      return res.status(404).json({ error: "Classroom not found" });
+    }
+
+    return res.status(200).json({ Updated_Classroom: updatedClassroom });
+  } catch (err) {
+    return res.status(500).json({ error: `Internal Server Error -> ${err}` });
+  }
+};
+
+
+exports.pclass = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Classroom.findById(id);
     res.status(200).json({ msg: data })
   } catch (error) {
     console.log(error)
@@ -156,7 +186,7 @@ exports.students = async (req, res) => {
 
 exports.classrooms = async (req, res) => {
   try {
-    const data = await Classroom.find({}); 
+    const data = await Classroom.find({});
     res.status(200).json({ msg: data })
   } catch (error) {
     console.log(error)
@@ -166,20 +196,46 @@ exports.classrooms = async (req, res) => {
 exports.signup = async (req, res) => {
   const { username, mail, subject, teacher_id, student_id, type, password, branch, yos } = req.body;
 
-  if (!username || !password) {
-    console.log('Please add all the required fields');
-    return res.status(422).json({ error: "Please add all the required fields" });
+
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const passRege = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+
+  if (!mail || !password || !type) {
+    return res.status(422).json({ error: "Please provide a valid username and password" });
   }
+
+  if (!emailRegex.test(mail)) {
+    alert("Invalid Email");
+    return;
+  }
+  else if (!passRege.test(password)) {
+    alert("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
+    return;
+  }
+
+
 
   try {
     let userType;
 
     if (type === 'Student') {
       userType = 'Student';
+      if (!username || !password || !student_id || !mail || !branch || !yos) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else if (type === 'Admin') {
       userType = 'Admin';
+      if (!username || !password || !mail) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else if (type === 'Teacher') {
       userType = 'Teacher';
+      if (!username || !password || !teacher_id || !mail || !subject) {
+        console.log('Please add all the required fields');
+        return res.status(422).json({ error: "Please add all the required fields" });
+      }
     } else {
       console.log('Invalid user type');
       return res.status(422).json({ error: 'Invalid user type' });
@@ -217,12 +273,9 @@ exports.signup = async (req, res) => {
   }
 };
 
-
-
-
 exports.getclass = async (req, res) => {
   try {
-    const {strength} = req.query;
+    const { strength } = req.query;
 
     if (isNaN(strength)) {
       return res.status(400).json({ error: "Strength parameter must be a valid number" });
@@ -231,8 +284,8 @@ exports.getclass = async (req, res) => {
     const classrooms = await Classroom.find({
       isReserved: false,
       strength: { $gte: strength }
-  }).select('classroom_no strength facility isReserved');
-  
+    }).select('classroom_no strength facility isReserved');
+
 
     if (classrooms.length === 0) {
       console.log("No classes found with isReserved set to false");
@@ -250,17 +303,11 @@ exports.getclass = async (req, res) => {
 
 exports.updateclass = async (req, res) => {
   const { id } = req.query;
-
-  // if (!req.Teacher || !req.Teacher.username) {
-  //   return res.status(401).json({ message: 'Unauthorized' });
-  // }
-
-  // const { username: faculty_name } = req.Teacher;
+  const{username} = req.body;
   try {
     const classroom = await Classroom.findOneAndUpdate(
       { _id: id },
-      // { $set: { isReserved: true, faculty_name } },
-      { $set: { isReserved: true, faculty_name:"Ashish Sabka Baap" } },
+      { $set: { isReserved: true, faculty_name:username } },
       { useFindAndModify: false, new: true }
     );
 
@@ -275,6 +322,8 @@ exports.updateclass = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+// Assuming you have the necessary imports and configurations
 
 exports.putAttendance = async (req, res) => {
   const { student_id, sub_name, presentLec, totalLec } = req.body;
@@ -303,7 +352,7 @@ exports.putAttendance = async (req, res) => {
 
     await student.save();
 
-    res.status(200).json({ message: "Attendance updated successfully" });
+    res.status(200).json({ message: "Attendance updated successfully", });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -311,11 +360,12 @@ exports.putAttendance = async (req, res) => {
 };
 
 exports.getAttendanceForStudent = async (req, res) => {
-  const { student_id } = req.body;
-  console.log("USERID:", student_id);
+  const id = "123";
+  console.log("Request Body:", req.query);
+  console.log("USERID:", id);
   try {
-    const student = await Student.findOne({ student_id });
-    console.log("STU:",student)
+    const student = await Student.findOne({ student_id: id });
+    console.log("STU:", student)
     if (!student) {
       return res.status(404).json({ error: "Student not found" });
     }
@@ -338,6 +388,22 @@ exports.getAttendanceForStudent = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// exports.getAttendanceForStudent = async (req, res) => {
+//   const id= 123;
+//   try {
+    
+
+//     res.status(200).json({
+//       attendanceData,
+//       totalAttendancePercentage,
+//       subjectWiseAttendance,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 // Function to calculate total attendance percentage
 const calculateTotalAttendancePercentage = (attendanceData) => {
@@ -370,3 +436,25 @@ const calculateSubjectWiseAttendance = (attendanceData) => {
 
   return subjectWiseAttendance;
 };
+
+exports.revokeClass = async (req, res) => {
+  const { classId } = req.body;
+  if (!classId) {
+    res.status(500).json({ error: "Please enter a valid ID" })
+  }
+  try {
+    const className = await Classroom.findOneAndUpdate(
+      { _id: classId },
+      { isReserved: false },
+      { useFindAndModify: false, new: true }
+    )
+    if (!className) {
+      return res.status(404).json({ message: 'No reserved classrooms found.' });
+    }
+
+    res.status(200).json({ message: 'Classroom updated successfully', className });
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e })
+  }
+}

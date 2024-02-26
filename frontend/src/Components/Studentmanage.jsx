@@ -1,43 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar';
-import { Link } from 'react-router-dom';
-import { useAuth } from './store/auth';
+import React from 'react'
+import Navbar from './Navbar'
 
-export default function Manage() {
-    const [klass, setKlass] = useState("");
-    const { backend_api } = useAuth();
-    const userAuthentication = async () => {
-        try {
-            const response = await fetch(`${backend_api}/fetchClass`, {
-                method: "GET",
-            });
+export default function Studentmanage() {
 
-            if (response.ok) {
-                const data = await response.json();
-
-                if (data.msg) {
-                    setKlass(data.msg);
-                } else {
-                    console.error("Unexpected API response format:", data);
-                }
-            } else {
-                console.error("Server returned an error:", response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error("Error during user authentication:", error);
-        }
-    };
-
-    useEffect(() => {
-        userAuthentication();
-    }, [])
-
-    return (
-
-        <>
-            <Navbar />
-            <div className="container">
-                <div className="table-responsive mt-5">
+    
+  return (
+    <>
+    <Navbar/>
+    <div className="container">
+    <div className="table-responsive mt-5">
                     <table className="table">
                         <thead>
                             <tr>
@@ -66,12 +37,12 @@ export default function Manage() {
 
                     </table>
                 </div>
-                <style>{`
-                body{
-                    margin-top:100px
-                }
-                `}</style>
-            </div>
-        </>
-    )
+    </div>
+    <style>{`
+    body{
+        margin-top:100px
+    }
+    `}</style>
+    </>
+  )
 }

@@ -44,10 +44,10 @@ export default function Navbar({ user }) {
                                         {userData.isTeacher && (
                                             <>
                                                 <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/assignments'>BroadCast</Link>
+                                                    <Link className="nav-link active" aria-current="page" to='/classroom'>FindClass</Link>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <Link className="nav-link active" aria-current="page" to='/dashboard'>Dashboard</Link>
+                                                    <Link className="nav-link active" aria-current="page" to='/assignments'>Connect</Link>
                                                 </li>
                                                 <li className="nav-item">
                                                     <Link className="nav-link active" aria-current="page" to='/tattendance'>Attendance</Link>
@@ -93,16 +93,18 @@ export default function Navbar({ user }) {
         body {
           width: 100%;
           overflow-x: hidden;
-          z-index: 1;
+          z-index: 10;
         }
         .nav-cont {
           width: 100%;
+          background-color:rgba(255,255,255,0.3);
           position: fixed;
           top: 0;
           left: 0;
         }
         .logo{
             width:200px;
+            margin-left:10px;
         }
         li {
           margin-inline: 10px;

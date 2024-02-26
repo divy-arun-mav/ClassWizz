@@ -1,0 +1,142 @@
+[
+    {
+        "classroom_no": "Room 21",
+        "faculty_name":"null",
+        "strength": 25,
+        "facility": "lab",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 22",
+        "faculty_name":"null",
+        "strength": 30,
+        "facility": "pc",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 23",
+        "faculty_name":"null",
+        "strength": 15,
+        "facility": "smartboard",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 24",
+        "faculty_name":"null",
+        "strength": 22,
+        "facility": "projector",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 25",
+        "faculty_name":"null",
+        "strength": 18,
+        "facility": "lab",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 26",
+        "faculty_name":"null",
+        "strength": 27,
+        "facility": "pc",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 27",
+        "faculty_name":"null",
+        "strength": 20,
+        "facility": "smartboard",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 28",
+        "faculty_name":"null",
+        "strength": 16,
+        "facility": "projector",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 29",
+        "faculty_name":"null",
+        "strength": 32,
+        "facility": "lab",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 30",
+        "faculty_name":"null",
+        "strength": 28,
+        "facility": "pc",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 31",
+        "faculty_name":"null",
+        "strength": 14,
+        "facility": "smartboard",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 32",
+        "faculty_name":"null",
+        "strength": 19,
+        "facility": "projector",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 33",
+        "faculty_name":"null",
+        "strength": 26,
+        "facility": "lab",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 34",
+        "faculty_name":"null",
+        "strength": 21,
+        "facility": "pc",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 35",
+        "faculty_name":"null",
+        "strength": 17,
+        "facility": "smartboard",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 36",
+        "faculty_name":"null",
+        "strength": 23,
+        "facility": "projector",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 37",
+        "faculty_name":"null",
+        "strength": 31,
+        "facility": "lab",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 38",
+        "faculty_name":"null",
+        "strength": 29,
+        "facility": "pc",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 39",
+        "faculty_name":"null",
+        "strength": 13,
+        "facility": "smartboard",
+        "isReserved": false
+    },
+    {
+        "classroom_no": "Room 40",
+        "faculty_name":"null",
+        "strength": 24,
+        "facility": "projector",
+        "isReserved": false
+    }
+]
