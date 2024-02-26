@@ -37,7 +37,6 @@ function App() {
         <Route exact path='/assignments' element={<Assignment />} />
         <Route exact path='/manage' element={<Manage />} />
         <Route exact path='/edit/:id' element={<Edit />} />
-
         <Route exact path='/classroom' element={<ClassRoom />} />
         {person === 'Student' && <Route exact path='/studentregister' element={<StudentRegister />} />}
         {person === 'Teacher' && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
