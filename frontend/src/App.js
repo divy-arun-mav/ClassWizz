@@ -25,6 +25,7 @@ function App() {
     setUser(ans ? JSON.parse(ans) : null);
     console.log("PERSON", person);
   }, []);
+  
   return (
     <>
       <Routes>
