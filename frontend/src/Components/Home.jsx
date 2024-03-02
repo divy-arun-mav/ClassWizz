@@ -3,10 +3,12 @@ import back from '../assets/EduManager.png';
 import backres from '../assets/EduManagerResponsive.png';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
 
     const bgImg = useRef();
+    const navigate = useNavigate();
 
     const changeBG = () => {
         if (window.innerWidth < 1000) {
@@ -27,18 +29,18 @@ const Home = () => {
         return () => {
             window.removeEventListener('resize', changeBG);
         };
-    }, [window.innerWidth]);
+    }, []);
 
     return (
         <div>
             <Navbar />
             <img src={back} alt="background" ref={bgImg} />
             <div className="btn-grp">
-                <button className='experience-it1'>Experience It</button>
-                <button className='explore-more1'>Explore More</button>
-                <button className='experience-it2'>Experience It</button>
-                <button className='explore-more2'>Explore More</button>
-                <button className='experience-it3'>Experience It</button>
+                <button onCLick={() => { navigate('/about') }} className='experience-it1'>Experience It</button>
+                <button onCLick={() => { navigate('/about') }} className='explore-more1'>Explore More</button>
+                <button onCLick={() => { navigate('/about') }} className='experience-it2'>Experience It</button>
+                <button onCLick={() => { navigate('/about') }} className='explore-more2'>Explore More</button>
+                <button onCLick={() => { navigate('/about') }} className='experience-it3'>Experience It</button>
             </div>
             {/* <iframe
                 src="https://www.chatbase.co/chatbot-iframe/GfYzYWt2RVJHxYp9msNSN"
@@ -131,21 +133,21 @@ const Home = () => {
                         width:100%;
                     }
                     .experience-it1{
-                        top:780px;
+                        top:810px;
                         right:0;
                     }
                     .explore-more1{
-                        top:1600px;
+                        top:1610px;
                     }
                     .experience-it2{
                         top:2400px;
                         right:0;
                     }
                     .explore-more2{
-                        top:3260px;
+                        top:3230px;
                     }
                     .experience-it3{
-                        top:4080px;
+                        top:4050px;
                         right:0;
                     }
                     }
