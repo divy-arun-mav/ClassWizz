@@ -10,8 +10,8 @@
 
 # production
 /build
+./src/Components/store/url
 
-./Components/store/url.js
 
 
 # misc
