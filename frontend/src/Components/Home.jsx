@@ -17,13 +17,17 @@ const Home = () => {
     }
 
     useEffect(() => {
-        changeBG();
+        if (window.innerWidth < 1000) {
+            bgImg.current.src = backres;
+        } else {
+            bgImg.current.src = back;
+        }
         window.addEventListener('resize', changeBG);
 
         return () => {
             window.removeEventListener('resize', changeBG);
         };
-    }, []);
+    }, [window.innerWidth]);
 
     return (
         <div>
