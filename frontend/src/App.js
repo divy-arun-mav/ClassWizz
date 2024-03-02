@@ -25,10 +25,9 @@ function App() {
     setUser(ans ? JSON.parse(ans) : null);
     console.log("PERSON", person);
   }, []);
-
+  
   return (
     <>
-      
       <Routes>
         <Route exact path='/navbar' element={<Navbar />} />
         <Route exact path='/' element={<Home />} />
@@ -38,7 +37,6 @@ function App() {
         <Route exact path='/assignments' element={<Assignment />} />
         <Route exact path='/manage' element={<Manage />} />
         <Route exact path='/edit/:id' element={<Edit />} />
-
         <Route exact path='/classroom' element={<ClassRoom />} />
         {person === 'Student' && <Route exact path='/studentregister' element={<StudentRegister />} />}
         {person === 'Teacher' && <Route exact path='/teacherregister' element={<TeacherRegister />} />}
