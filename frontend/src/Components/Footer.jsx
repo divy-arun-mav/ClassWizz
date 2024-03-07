@@ -9,11 +9,9 @@ const Footer = () => {
       <style>
         {`
         .footer-cont {
-          position: fixed;
-          left: 0;
-          bottom: 0;
           width: 100%;
-          background-color: black;
+          background: rgb(54,111,196);
+                    background: linear-gradient(90deg, rgba(54,111,196,1) 20%, rgba(151,110,209,1) 100%);
           color: white;
           text-align: center;
         }

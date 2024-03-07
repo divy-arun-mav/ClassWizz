@@ -1,4 +1,4 @@
-import './App.css';
+// import './App.css';
 import { useState,useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -15,6 +15,7 @@ import TAttendance from './Components/TAttendance';
 import Assignment from './Components/Assignment';
 import Manage from './Components/Manage';
 import Edit from './Components/Edit';
+import Slider from "./Components/Slider"
 
 function App() {
   const { person } = useAuth();

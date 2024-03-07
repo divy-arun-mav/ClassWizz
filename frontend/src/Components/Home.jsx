@@ -1,58 +1,78 @@
 import React, { useEffect, useRef } from 'react';
-import back from '../assets/EduManager.png';
-import backres from '../assets/EduManagerResponsive.png';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { useNavigate } from 'react-router-dom';
+import Img1 from '../assets/edum-1.png';
+
+const Card = ({ head1, head2, t1, btn1, imgSrc }) => {
+    return (
+        <>
+            <div className='box-main'>
+                <img src={imgSrc} className='img' alt="img" srcset="" />
+                <div className='util-box'>
+                    <h2 className='head-1'>{head1}</h2>
+                    <h1 className='head-2'>{head2}</h1>
+                    <p className='t-1'>{t1}</p>
+                    <button className='btn1'>{btn1}</button>
+                </div>
+            </div>
+        </>
+    );
+}
+
 
 const Home = () => {
 
-    const bgImg = useRef();
-    const navigate = useNavigate();
-
-    const changeBG = () => {
-        if (window.innerWidth < 1000) {
-            bgImg.current.src = backres;
-        } else {
-            bgImg.current.src = back;
-        }
-    }
-
-    useEffect(() => {
-        if (window.innerWidth < 1000) {
-            bgImg.current.src = backres;
-        } else {
-            bgImg.current.src = back;
-        }
-        window.addEventListener('resize', changeBG);
-
-        return () => {
-            window.removeEventListener('resize', changeBG);
-        };
-    }, []);
-
     return (
-        <div>
-            <Navbar />
-            <img src={back} alt="background" ref={bgImg} />
-            <div className="btn-grp">
-                <button onCLick={() => { navigate('/about') }} className='experience-it1'>Experience It</button>
-                <button onCLick={() => { navigate('/about') }} className='explore-more1'>Explore More</button>
-                <button onCLick={() => { navigate('/about') }} className='experience-it2'>Experience It</button>
-                <button onCLick={() => { navigate('/about') }} className='explore-more2'>Explore More</button>
-                <button onCLick={() => { navigate('/about') }} className='experience-it3'>Experience It</button>
+        <div className='home'>
+            <div className="nav">
+                <Navbar />
             </div>
-            {/* <iframe
-                src="https://www.chatbase.co/chatbot-iframe/GfYzYWt2RVJHxYp9msNSN"
-                width="100%"
-                style={{height: "100%", minHeight: "700px"}}
-                frameborder="0"
-            ></iframe> */}
-            {/* <Footer /> */}
+            <div>
+                <Card
+                    head1="Welcome to EduManager"
+                    head2="Your Ultimate Classroom Management Solution"
+                    t1="Are you tired of the hassle and chaos involved in managing classroom schedules? Look no further! EduManager is here to revolutionize the way you handle classroom allocation and scheduling"
+                    btn1="Experience It"
+                    imgSrc={Img1}
+                />
+                <Card
+                    head1="Swift and Easy"
+                    head2="Optimize your Resources Effectively"
+                    t1="With our advanced resource optimization algorithm, EduManager ensures that classrooms are allocated efficiently based on factors like class size, subject requirements, and facility availability"
+                    btn1="Explore More"
+                    imgSrc={Img1}
+                />
+                <Card
+                    head1="Stay Up-to-Date with Real-time Schedule"
+                    t1="Whether it's last-minute changes or unexpected events, our platform EduManager allows for instant adjustments to the class schedule, ensuring smooth operations at all times"
+                    btn1="Experience It"
+                    imgSrc={Img1}
+                />
+                <Card
+                    head1="Never Miss a Beat with Automated Notifications"
+                    t1="EduManager keeps everyone in the loop with automated notifications. Teachers and students will receive instant alerts about any changes in their classroom assignments, ensuring no one misses important updates"
+                    btn1="Explore More"
+                    imgSrc={Img1}
+                />
+                <Card
+                    head1="Gain Insights with Historical Data Analysis"
+                    t1="Unlock the power of data with EduManager's historical data analysis feature. Identify trends, optimize future scheduling decisions, and take your classroom management to the next level"
+                    btn1="Experience It"
+                    imgSrc={Img1}
+                />
+            </div>
+            <Footer />
             <style>
                 {`
                 body{
                     background-color: #e3f5ff;
+                }
+                .home{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    flex-direction:column;
+                    margin-top:100px;
                 }
                 .btn-grp{
                     display:flex;
@@ -61,97 +81,95 @@ const Home = () => {
                     flex-direction:column;
                     
                 }
-                .btn-grp button{
+                .box-main{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    width:83%;
+                    height:auto;
+                    background: rgb(54,111,196);
+                    background: linear-gradient(90deg, rgba(54,111,196,1) 20%, rgba(151,110,209,1) 100%);
+                    border-radius: 40px;
+                    margin:0 0 60px 10%;
+                    padding:20px;
+                    color:white;
+                }
+                .head-1{
+                    font-size:3vw;
+                    font-weight:400;
+                    margin: 0 0 40px 30px;
+                }
+                .head-2{
+                    font-size:4vw;
+                    margin: 0 0 40px 30px;
+                    font-weight:600;
+                }
+                .t-1{
+                    font-size:1.5vw;
+                    font-weight:400;
+                    margin: 0 0 40px 30px;
+                }
+                .btn1{
                     background-color:skyblue;
                     border:0.5px solid white;
                     border-radius:10px;
                     padding:10px 20px;
+                    margin: 0 0 0 100px;
                     font-weight:600;
-                    font-size:25px;
+                    font-size:1.6vw;
                     color:white;
-                    position:relative;
                     box-shadow: 2px 4px 10px purple;
                     cursor:pointer;
-                    z-index:-1;
                 }
-                .experience-it1{
-                    top:650px;
-                    right:400px;
+                .img{
+                    width:35%;
                 }
-                .explore-more1{
-                    top:1350px;
+                @media screen and (max-width: 1100px){
+
+                    .nav{
+                        z-index: 1;
+                    }
+
+                    .box-main{
+                        flex-direction: column;
+                        text-align:center;
+                        // height:70vh;
+                        // margin-bottom: 400px;
+                        // margin-top: 100px;
+                    }
+                    .util-box{
+                        display:flex;
+                        justify-content:center;
+                        align-items:center;
+                        flex-direction:column;
+                        text-align:center;
+                    }
+                    .img{
+                        width:90%;
+                        // position:relative;
+                        // bottom:40px;
+                    }
+                    .head-1{
+                        font-size:3.5vw;
+                        text-align:center;
+                        margin:0px 0px 10px 0;
+                    }
+                    .head-2{
+                        font-size:5vw;
+                        text-align:center;
+                        margin:0px 0px 10px 0;
+                    }
+                    .t-1{
+                        font-size:4vw;
+                        text-align:center;
+                        margin:0px 0px 10px 0;
+                    }
+                    .btn1{
+                        font-size:3vw;
+                        margin:0;
+                    }
                 }
-                .experience-it2{
-                    top:2050px;
-                    right:400px;
-                }
-                .explore-more2{
-                    top:2750px;
-                }
-                .experience-it3{
-                    top:3450px;
-                    right:400px;
-                }
-                img{
-                    position:absolute;
-                    top:0;
-                    left:0;
-                    z-index:-2;
-                    width:100%;
-                    user-drag: none;
-                    -webkit-user-drag: none;
-                    user-select: none;
-                    -moz-user-select: none;
-                    -webkit-user-select: none;
-                    -ms-user-select: none;
-                }
-                @media screen and (max-width:1500px){
-                    img{
-                        width:100%;
-                    }
-                    .experience-it1{
-                        top:500px;
-                        right:400px;
-                    }
-                    .explore-more1{
-                        top:1100px;
-                    }
-                    .experience-it2{
-                        top:1650px;
-                        right:400px;
-                    }
-                    .explore-more2{
-                        top:2250px;
-                    }
-                    .experience-it3{
-                        top:2830px;
-                        right:400px;
-                    }
-                    }
-                    @media screen and (max-width:720px){
-                    img{
-                        width:100%;
-                    }
-                    .experience-it1{
-                        top:810px;
-                        right:0;
-                    }
-                    .explore-more1{
-                        top:1610px;
-                    }
-                    .experience-it2{
-                        top:2400px;
-                        right:0;
-                    }
-                    .explore-more2{
-                        top:3230px;
-                    }
-                    .experience-it3{
-                        top:4050px;
-                        right:0;
-                    }
-                    }
-                `}
+            `}
             </style>
         </div>
     )

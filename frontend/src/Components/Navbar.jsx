@@ -103,7 +103,8 @@ export default function Navbar({ user }) {
           left: 0;
         }
         .logo{
-            width:200px;
+            width:40vw;
+            max-width:200px;
             margin-left:10px;
         }
         li {
@@ -111,6 +112,11 @@ export default function Navbar({ user }) {
         }
         .nav-item select {
           margin-top: 10px;
+        }
+        @media screen and (max-width:1000px){
+            .logo{
+                width:40vw;
+            }
         }
       `}</style>
         </>
